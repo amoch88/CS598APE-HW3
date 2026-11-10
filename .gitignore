@@ -18,3 +18,10 @@
 
 # Compiled handouts
 /handout/*.pdf
+
+# Local runs and generated baseline artifacts
+/results/
+/identity.png
+/sandpile.exe
+__pycache__/
+*.pyc
