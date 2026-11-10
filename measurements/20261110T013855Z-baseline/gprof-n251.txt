@@ -1,0 +1,12 @@
+Flat profile:
+
+Each sample counts as 0.01 seconds.
+  %   cumulative   self              self     total           
+ time   seconds   seconds    calls   s/call   s/call  name    
+100.00      2.58     2.58        2     1.29     1.29  stabilize
+  0.00      2.58     0.00    30825     0.00     0.00  stbiw__zlib_flushf
+  0.00      2.58     0.00     1506     0.00     0.00  stbiw__encode_png_line
+  0.00      2.58     0.00        1     0.00     1.29  find_identity
+  0.00      2.58     0.00        1     0.00     0.00  stbi_write_png
+  0.00      2.58     0.00        1     0.00     0.00  stbi_write_png_to_mem
+  0.00      2.58     0.00        1     0.00     0.00  stbi_zlib_compress

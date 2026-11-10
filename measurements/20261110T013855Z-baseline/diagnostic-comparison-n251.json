@@ -1,0 +1,9 @@
+{
+  "all_integer_cells": "PASS",
+  "decoded_pixels": {
+    "width": 251,
+    "height": 251,
+    "decoded_rgb_sha256": "280b0ad0caf9c518dfd63973b388ba5020e59cd7830719b8a79851e8a8977e8e",
+    "mismatched_channels": 0
+  }
+}

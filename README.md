@@ -65,7 +65,7 @@ python3 scripts/reproduce.py --output "results/reproduction-$(date -u +%Y%m%dT%H
 ```
 
 This may take substantial time: it executes three full-size baseline runs and
-additional full-size correctness/diagnostic runs. Keep other compute workloads
+one additional full-size integer-grid correctness run. Keep other compute workloads
 idle. The launcher refuses an existing output directory, archives the exact
 baseline Git commit, builds it using its original Makefile and flags
 `-O3 -lm -g -Werror`, records source/binary hashes and environment information,
@@ -160,3 +160,15 @@ GNU time values are original; its auxiliary Python launcher time is unavailable
 and left blank, and its start timestamp is reconstructed from the pre-run snapshot
 mtime. The original five-run manifest and transition details remain in results.
 Future reproductions start directly with three runs; use `--runs 5` if desired.
+
+### Completed initial study
+
+The VM study completed with three N=1001 release observations: 646.93, 645.67,
+and 655.74 seconds (median 646.93 s; sample SD 5.49 s). All 62 correctness checks,
+the decoder test, seven ASan/UBSan runs, and N=101 Valgrind Memcheck passed.
+The target decoded reference comparison had zero mismatched channels.
+See [baseline findings](docs/BASELINE_FINDINGS.md) for measured profiling evidence,
+ranked next experiments, limitations and the full correctness scope, and
+[committed raw evidence](measurements/20261110T013855Z-baseline) for timings,
+environment details and compact profile extracts. Large generated artifacts remain
+in the ignored VM results directory. No production optimization is implemented.

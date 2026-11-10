@@ -1,0 +1,12 @@
+{
+  "binary": "/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline/bin/baseline.exe",
+  "binary_sha256": "733886fa1f21cdd71d9a9bc77e3564d8aca91d39a8264b4ccb735fe3480eb2c5",
+  "size": 1001,
+  "runs": 3,
+  "cpu": 0,
+  "warmup": "one excluded N=101 preflight; no full-size warmup",
+  "timer": "GNU /usr/bin/time; includes image creation and buffered PNG writing",
+  "flags": "-O3 -lm -g -Werror",
+  "source_commit": "15fe837445b8e32a15ac61fcfa388980b54d9173",
+  "run_count_revision": "User requested three total while run 2 was in progress; its sandpile and GNU time processes were not interrupted."
+}

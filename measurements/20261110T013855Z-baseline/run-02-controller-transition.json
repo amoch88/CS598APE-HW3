@@ -1,0 +1,7 @@
+{
+  "measurement_interrupted": false,
+  "gnu_time_metrics": "original uninterrupted GNU time child",
+  "start_utc_source": "mtime of original proc-stat.before; approximate process launch timestamp",
+  "launcher_wall_seconds": "unavailable after controller replacement; intentionally blank",
+  "post_stat_snapshot": "captured within polling interval after GNU time exited"
+}

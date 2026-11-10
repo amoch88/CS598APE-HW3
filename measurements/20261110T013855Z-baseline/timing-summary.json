@@ -1,0 +1,11 @@
+{
+  "n": 3,
+  "median_seconds": 646.93,
+  "min_seconds": 645.67,
+  "max_seconds": 655.74,
+  "mean_seconds": 649.4466666666666,
+  "sample_sd_seconds": 5.486477315485199,
+  "q1_seconds": 646.3,
+  "q3_seconds": 651.335,
+  "all_png_hashes_equal": true
+}
