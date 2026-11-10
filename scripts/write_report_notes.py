@@ -6,6 +6,10 @@ REPO='https://github.com/amoch88/CS598APE-HW3'
 LABELS={'original':'Original','row-intervals':'Row intervals','row-batch':'Rows + checked batch','row-batch-bounded':'Rows + bounded batch','worklist-unit':'FIFO unit','worklist-batch':'FIFO batch','contiguous':'Contiguous storage','alternating':'Alternating sweeps','padded':'Padded boundaries','remainder':'Remainder mask','combined':'Final combined'}
 p=argparse.ArgumentParser();p.add_argument('summary',type=pathlib.Path);p.add_argument('--selection',type=pathlib.Path,required=True);p.add_argument('--output',type=pathlib.Path,required=True);a=p.parse_args()
 d=json.loads(a.summary.read_text());data=d['measurements'];variants=d['variants'];sel=json.loads(a.selection.read_text())['selected'];name=sel['name'];source=sel['source_commit'];r=pathlib.Path(sel['path'])
+def study_path(variant):
+    original=pathlib.Path(variants[variant]['results'])
+    return original if original.is_dir() else a.summary.resolve().parent/variant
+r=study_path(name)
 lookup={(x['variant'],x['size']):x for x in data};final=lookup[name,1001]
 assert json.loads((r/'final-validation.json').read_text())['status']=='PASS'
 def fmt(value):return f'{value:.2f}'
@@ -38,7 +42,7 @@ for variant in variants:
  lines.append('| '+LABELS[variant]+' | '+' | '.join(values)+' |')
 lines+=['','Each repeated entry is a three-run median in seconds. Rejected FIFO variants stop at N=251; contiguous/remainder screens stop at N=501. Missing values are not extrapolated. N=101 has coarse 0.01-second quantization.','', '| Independent screen | N | Candidate median | Fresh parent median | Parent / candidate |','|---|---:|---:|---:|---:|']
 for variant,meta in variants.items():
- study=pathlib.Path(meta['results']);file=study/'parent-measurements.csv'
+ study=study_path(variant);file=study/'parent-measurements.csv'
  if not file.exists():continue
  import csv
  parent=list(csv.DictReader(file.open()))
@@ -48,7 +52,7 @@ for variant,meta in variants.items():
    med=statistics.median(pv);lines.append(f"| {LABELS[variant]} | {n} | {x['median_seconds']:.2f} | {med:.2f} | {med/x['median_seconds']:.3f}x |")
 lines+=['','Fresh parent measurements are retained separately and not pooled into historical distributions. Screens use seed 598 and three paired blocks per size. Bounded batching is the parent for each independent extension; padding is the parent for the combined screen. Candidate promotion required N=501 paired median speedup >1.01 and N=251 ratio >=1.0 after correctness passed; this is a practical screen, not a significance test.','', '## Instruction evidence','', '| Configuration | N=101 Callgrind Ir |','|---|---:|','| Original | 510,187,636 |','| Row intervals | 184,285,289 |']
 for variant,meta in variants.items():
- file=pathlib.Path(meta['results'])/'callgrind-n101/summary.json'
+ file=study_path(variant)/'callgrind-n101/summary.json'
  if file.exists():lines.append(f"| {LABELS[variant]} | {json.loads(file.read_text())['total_instructions']:,} |")
 lines+=['','Checked batching executed 251,023,325 instructions versus 164,335,795 for bounded batching, consistent with the hot per-addition checks explaining its slowdown. The halo experiment was motivated by 33,311,928 instructions attributed to two neighbor-condition lines (20.27% of bounded N=101 Ir); optimized source attribution is approximate. Runtime does not scale directly with instruction count. `perf` was denied by VM policy; no IPC, cache-miss or hardware branch-miss data exist. Profiler/adapter times are excluded from release distributions.','', '## Correctness actually completed','']
 validation=json.loads((r/'final-validation.json').read_text());small=json.loads((r/'small-correctness/report.json').read_text());target=json.loads((r/'target-correctness/report.json').read_text());identity=next(x for x in target['checks'] if x.get('kind')=='identity')
@@ -62,7 +66,7 @@ lines += [f"Selected source: {source}; source SHA256 `{validation['source_sha256
 f"- Clean rebuild is byte-identical to the target-validated executable. Post-rebuild smaller checks pass, and {len(validation['mask']['sizes'])} mask sizes compare {validation['mask']['total_positions']:,} positions with zero mismatches.",
 f"- All {len(validation['target_image_comparisons'])} final target release images match the supplied reference with zero mismatched channels. Decoded target RGB SHA256 is `{identity['reference_comparison']['decoded_rgb_sha256']}`.",
 '', 'The production allocator is used by the adapter when a layout variant advertises the shared allocator interface; memory safety and integer verification therefore cover the actual selected layout. Rejected variants retain their exact completed scope in their own reports; they are not promoted to target-size correctness claims.','', '## Methodology, reproducibility and limitations','',
-'Hardware/software: UIUC fa26-cs598a-022.cs.illinois.edu, Intel Xeon Silver 4216 @2.10 GHz, four exposed VMware vCPUs, Ubuntu 26.04.1 LTS, Linux 7.0.0-31-generic, GCC 15.2.0 (Ubuntu 15.2.0-16ubuntu1), Python 3.14 and Valgrind 3.26.0. Unchanged release flags: `-O3 -lm -g -Werror`. One process at a time, `taskset -c 0`, GNU time end-to-end elapsed/user/system/RSS. Allocation, precomputation, both stabilizations, PNG creation/buffered writing and cleanup are timed. No fsync and no target-size warmup; excluded N=101 preflights are recorded.',
+'Hardware/software: UIUC fa26-cs598a-022.cs.illinois.edu, Intel Xeon Silver 4216 @2.10 GHz, four exposed VMware vCPUs, Ubuntu 26.04.1 LTS, Linux 7.0.0-31-generic, GCC 15.2.0 (Ubuntu 15.2.0-16ubuntu1), Python 3.14 and Valgrind 3.26.0. Unchanged release flags: `-O3 -lm -g -Werror`. One benchmark workload at a time, `taskset -c 0`, GNU time end-to-end elapsed/user/system/RSS. Allocation, precomputation, both stabilizations, PNG creation/buffered writing and cleanup are timed. No fsync and no target-size warmup; excluded N=101 preflights are recorded.',
 '', 'Report medians, ranges and sample SD. Whiskers are observed min-max ranges, not confidence intervals. Three repetitions are limited evidence; VM load, frequency, cache history and host scheduling are not fully controlled. Historical cohorts are not all paired. Timer quantization can make a measured SD zero. Do not infer a theoretical complexity exponent or target-size profile fractions from these smaller samples.',
 '', 'The original CLI permits huge sizes, but legacy renderer indexing/main-grid allocation limitations are outside this N<=1001 study. New grain arithmetic has a proof and fallback; this is not a general audit of arbitrary huge allocations. No OpenMP/GPU, compiler-flag, renderer, PNG-library, output lookup or hardcoded identity change is used. The repository remains private.',
 '', '### Source and branch mapping','', '| Configuration | Exact source commit | Branch |','|---|---|---|']

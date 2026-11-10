@@ -3,7 +3,7 @@
 import argparse,csv,hashlib,json,pathlib,shutil,statistics,subprocess
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--baseline',type=pathlib.Path,required=True);p.add_argument('--row',type=pathlib.Path,required=True)
-p.add_argument('--studies',nargs='+',type=pathlib.Path,required=True);p.add_argument('--output',type=pathlib.Path,required=True)
+p.add_argument('--studies',nargs='+',type=pathlib.Path,required=True);p.add_argument('--output',type=pathlib.Path,required=True);p.add_argument('--selection',type=pathlib.Path)
 a=p.parse_args();out=a.output.resolve();out.mkdir();b=a.baseline.resolve();row=a.row.resolve();records=[];variants={}
 def ingest(path,variant,commit,filter_fn=lambda x:True):
     for x in csv.DictReader(path.open()):
@@ -49,6 +49,7 @@ for x in summary:
     sd='unavailable (one run)' if x['sample_sd_seconds'] is None else f"{x['sample_sd_seconds']:.4f}"
     lines.append(f"| {x['variant']} | {x['size']} | {', '.join(f'{v:.2f}' for v in x['values_seconds'])} | {x['median_seconds']:.2f} | {x['min_seconds']:.2f} - {x['max_seconds']:.2f} | {sd} | {x['speedup_original']:.3f}x | {x['speedup_row']:.3f}x |")
 (out/'tables.md').write_text('\n'.join(lines)+'\n')
+if a.selection: shutil.copy2(a.selection,out/'selection.json')
 hashes={str(x.relative_to(out)):hashlib.sha256(x.read_bytes()).hexdigest() for x in sorted(out.rglob('*')) if x.is_file()}
 (out/'manifest.json').write_text(json.dumps(dict(files=hashes,baseline_results=str(b),row_results=str(row),generator_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),generator_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
 print(out/'tables.md')
