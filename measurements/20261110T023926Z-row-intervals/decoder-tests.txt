@@ -1,0 +1,6 @@
+test_all_filters_and_crc (test_png_pixels.PNGTests.test_all_filters_and_crc) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK

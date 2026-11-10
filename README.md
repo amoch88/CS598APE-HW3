@@ -172,3 +172,14 @@ ranked next experiments, limitations and the full correctness scope, and
 [committed raw evidence](measurements/20261110T013855Z-baseline) for timings,
 environment details and compact profile extracts. Large generated artifacts remain
 in the ignored VM results directory. No production optimization is implemented.
+
+### First isolated optimization: active row intervals
+
+Branch `hw3-row-intervals` implements exact precomputed active row intervals while
+preserving toppling order and all sink state. N=1001 end-to-end median fell from
+646.93 s to 304.82 s (**2.12x speedup**; optimized sample SD 1.46 s, three runs).
+All 63 correctness entries passed, including full integer/pixel comparisons;
+mask equivalence passed for 138 sizes. See the
+[row-interval experiment](docs/ROW_INTERVALS.md) for exact reproduction commands,
+all measurement scopes/limitations, correctness proof and work-reduction evidence.
+The original baseline remains available at its original commits and results paths.

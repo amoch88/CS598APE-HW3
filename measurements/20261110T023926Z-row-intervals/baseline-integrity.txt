@@ -1,0 +1,4 @@
+/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline/baseline-source.tar: OK
+/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline/bin/baseline.exe: OK
+/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline/source/sandpile.c: OK
+/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline/source/stb_image_write.h: OK

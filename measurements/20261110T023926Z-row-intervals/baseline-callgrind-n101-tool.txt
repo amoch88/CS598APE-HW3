@@ -1,0 +1,11 @@
+==8514== Callgrind, a call-graph generating cache profiler
+==8514== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==8514== Using Valgrind-3.26.0 and LibVEX; rerun with -h for copyright info
+==8514== Command: /home/am88/CS598APE-HW3/results/20261110T013855Z-baseline/bin/baseline.exe 101
+==8514== 
+==8514== For interactive control, run 'callgrind_control -h'.
+==8514== 
+==8514== Events    : Ir
+==8514== Collected : 510187636
+==8514== 
+==8514== I   refs:      510,187,636

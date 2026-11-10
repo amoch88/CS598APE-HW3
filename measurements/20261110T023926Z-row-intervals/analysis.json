@@ -1,0 +1,173 @@
+{
+  "candidate_source_commit": "7fd71987e27f00d690e5e0348d5701a76a12ca0b",
+  "baseline_source_commit": "15fe837445b8e32a15ac61fcfa388980b54d9173",
+  "correctness_entries": 63,
+  "mask_sizes": 138,
+  "mask_positions": 5653280,
+  "benchmarks": [
+    {
+      "size": 101,
+      "baseline": {
+        "n": 3,
+        "values_seconds": [
+          0.09,
+          0.08,
+          0.09
+        ],
+        "median_seconds": 0.09,
+        "min_seconds": 0.08,
+        "max_seconds": 0.09,
+        "mean_seconds": 0.08666666666666667,
+        "sample_sd_seconds": 0.0057735026918962545
+      },
+      "candidate": {
+        "n": 3,
+        "values_seconds": [
+          0.04,
+          0.04,
+          0.04
+        ],
+        "median_seconds": 0.04,
+        "min_seconds": 0.04,
+        "max_seconds": 0.04,
+        "mean_seconds": 0.04,
+        "sample_sd_seconds": 0.0
+      },
+      "speedup": 2.25,
+      "baseline_scope": "fresh exploratory paired blocks"
+    },
+    {
+      "size": 251,
+      "baseline": {
+        "n": 3,
+        "values_seconds": [
+          2.74,
+          2.72,
+          2.73
+        ],
+        "median_seconds": 2.73,
+        "min_seconds": 2.72,
+        "max_seconds": 2.74,
+        "mean_seconds": 2.73,
+        "sample_sd_seconds": 0.010000000000000009
+      },
+      "candidate": {
+        "n": 3,
+        "values_seconds": [
+          1.3,
+          1.3,
+          1.3
+        ],
+        "median_seconds": 1.3,
+        "min_seconds": 1.3,
+        "max_seconds": 1.3,
+        "mean_seconds": 1.3,
+        "sample_sd_seconds": 0.0
+      },
+      "speedup": 2.1,
+      "baseline_scope": "fresh exploratory paired blocks"
+    },
+    {
+      "size": 501,
+      "baseline": {
+        "n": 3,
+        "values_seconds": [
+          41.18,
+          41.16,
+          41.28
+        ],
+        "median_seconds": 41.18,
+        "min_seconds": 41.16,
+        "max_seconds": 41.28,
+        "mean_seconds": 41.20666666666666,
+        "sample_sd_seconds": 0.06429100507328832
+      },
+      "candidate": {
+        "n": 3,
+        "values_seconds": [
+          19.69,
+          19.77,
+          19.55
+        ],
+        "median_seconds": 19.69,
+        "min_seconds": 19.55,
+        "max_seconds": 19.77,
+        "mean_seconds": 19.67,
+        "sample_sd_seconds": 0.11135528725659997
+      },
+      "speedup": 2.0914169629253427,
+      "baseline_scope": "fresh exploratory paired blocks"
+    },
+    {
+      "size": 1001,
+      "baseline": {
+        "n": 3,
+        "values_seconds": [
+          646.93,
+          645.67,
+          655.74
+        ],
+        "median_seconds": 646.93,
+        "min_seconds": 645.67,
+        "max_seconds": 655.74,
+        "mean_seconds": 649.4466666666666,
+        "sample_sd_seconds": 5.486477315485199
+      },
+      "candidate": {
+        "n": 3,
+        "values_seconds": [
+          304.82,
+          304.34,
+          307.08
+        ],
+        "median_seconds": 304.82,
+        "min_seconds": 304.34,
+        "max_seconds": 307.08,
+        "mean_seconds": 305.4133333333333,
+        "sample_sd_seconds": 1.4631928558236393
+      },
+      "speedup": 2.1223344924873695,
+      "baseline_scope": "historical target distribution"
+    }
+  ],
+  "work_n251": {
+    "baseline_sweeps": [
+      7730,
+      3235
+    ],
+    "candidate_sweeps": [
+      7730,
+      3235
+    ],
+    "baseline_unit_topplings": [
+      131945672,
+      47820430
+    ],
+    "candidate_unit_topplings": [
+      131945672,
+      47820430
+    ],
+    "baseline_scan_visits": 519477840,
+    "candidate_scan_visits": 404564640,
+    "scan_reduction_percent": 22.12090509962851,
+    "baseline_geometry_evaluations": 519477840,
+    "candidate_precompute_geometry_evaluations": 94752,
+    "geometry_evaluation_reduction_percent": 99.98176014591883
+  },
+  "per_sweep_n1001": {
+    "baseline_positions": 752001,
+    "candidate_positions": 589365,
+    "reduction_percent": 21.627098900134445
+  },
+  "callgrind_n101": {
+    "baseline_instruction_refs": 510187636,
+    "candidate_instruction_refs": 184285289,
+    "reduction_percent": 63.878919049304436
+  },
+  "limitations": [
+    "N=1001 baseline is historical and unpaired; three observations per retained variant",
+    "GNU time 0.01-second resolution is coarse for N=101",
+    "N=251 instrumented work counts and N=101 instruction counts are exploratory; no hardware cache/IPC measurements"
+  ],
+  "analysis_script_sha256": "76ccd43022a2266d4fa0888beabd58fe93ade101abb07aafeae96fc381ecc631"
+}
