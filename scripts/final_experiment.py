@@ -35,7 +35,7 @@ def instrument(source):
     else:
         s=s.replace('    changed = 0;','    changed = 0;\n    work.sweeps++;')
         s=s.replace('        if (grid[i][j] < 4)','        work.visits++;\n        if (grid[i][j] < 4)')
-    anchor='grid[i][j] -= 4 * q;'
+    anchor='grid[i][j] &= 3;' if 'grid[i][j] &= 3;' in s else 'grid[i][j] -= 4 * q;'
     if s.count(anchor) not in [1,2,4]: raise ValueError('unexpected toppling instrumentation anchors')
     s=s.replace(anchor,'work.events++; work.unit_topplings += (uint64_t)q;\n        '+anchor)
     if s.count('  stabilize();')!=2: raise ValueError('expected two identity phases')
