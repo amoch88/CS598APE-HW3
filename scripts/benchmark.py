@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Sequential end-to-end runs; each output directory must be new."""
-import argparse, csv, datetime, hashlib, json, os, pathlib, statistics, subprocess, time
+import argparse, csv, datetime, hashlib, json, os, pathlib, signal, statistics, subprocess, time
 
 def digest(path):
     return hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()
 
-def run_one(binary, directory, n, cpu):
+def run_one(binary, directory, n, cpu, timeout=None):
     directory.mkdir()
     (directory / 'proc-stat.before').write_text(pathlib.Path('/proc/stat').read_text())
     command = ['/usr/bin/time', '-f', '%e,%U,%S,%M,%x', '-o', str(directory/'gnu-time.csv'),
@@ -13,7 +13,13 @@ def run_one(binary, directory, n, cpu):
     start = datetime.datetime.now(datetime.timezone.utc).isoformat()
     with (directory/'stdout.txt').open('w') as out, (directory/'stderr.txt').open('w') as err:
         t0 = time.perf_counter_ns()
-        p = subprocess.run(command, cwd=directory, stdout=out, stderr=err)
+        p = subprocess.Popen(command, cwd=directory, stdout=out, stderr=err, start_new_session=True)
+        try:
+            p.wait(timeout=timeout)
+        except subprocess.TimeoutExpired:
+            os.killpg(p.pid, signal.SIGKILL)
+            p.wait()
+            raise
         duration = (time.perf_counter_ns()-t0)/1e9
     (directory/'proc-stat.after').write_text(pathlib.Path('/proc/stat').read_text())
     fields = (directory/'gnu-time.csv').read_text().strip().split(',')
