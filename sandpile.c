@@ -160,7 +160,7 @@ static void stabilize() {
     int i = cell.i, j = cell.j;
     f.scheduled[(size_t)i * (size_t)N + (size_t)j] = 0;
     // Scheduled heights cannot decrease before their unique entry is popped.
-    int q = 1;
+    int q = grid[i][j] / 4;
     grid[i][j] -= 4 * q;
     if (i > 0) receive(&f,i-1,j,q);
     if (j > 0) receive(&f,i,j-1,q);
