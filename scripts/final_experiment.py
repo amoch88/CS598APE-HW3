@@ -82,16 +82,16 @@ def main():
         assert all(checks.values()),checks
         # A fresh clone needs only the original baseline study. Reuse its golden
         # grids and generate the missing N=501 oracle once, without row timings.
-        expected=row/'expected'
-        if not expected.is_dir():
+        goldens=row/'expected'
+        if not goldens.is_dir():
             event('prepare-baseline-goldens')
-            expected=r/'expected'; expected.mkdir()
+            goldens=r/'expected'; goldens.mkdir()
             for n in SMALL+[1001]:
-                if n!=501: (expected/f'n{n}').symlink_to(b/'golden'/f'n{n}',target_is_directory=True)
+                if n!=501: (goldens/f'n{n}').symlink_to(b/'golden'/f'n{n}',target_is_directory=True)
             if a.small_max>=501:
-                driver=expected/'baseline-driver.exe'
+                driver=goldens/'baseline-driver.exe'
                 run(['gcc','-O3','-g',f'-DSANDPILE_SOURCE="{b}/source/sandpile.c"',ROOT/'tests/grid_driver.c','-o',driver,'-lm'],r,'build-baseline-driver',pin=False)
-                d=expected/'n501'; d.mkdir(); run([driver,'identity',501,d/'identity.grid'],d,'generate',timeout=120)
+                d=goldens/'n501'; d.mkdir(); run([driver,'identity',501,d/'identity.grid'],d,'generate',timeout=120)
                 for name in ['identity.grid','identity.png']: (d/name).chmod(0o444)
         (r/'source').mkdir(); (r/'bin').mkdir(); (r/'timing').mkdir()
         with (r/'source.tar').open('wb') as f: subprocess.run(['git','archive',commit],cwd=ROOT,stdout=f,check=True)
@@ -100,7 +100,7 @@ def main():
         source=r/'source/sandpile.c'; binary=r/'source/sandpile.exe'
         save('build-hashes.json',dict(source=digest(source),binary=digest(binary),archive=digest(r/'source.tar')))
         event('small-correctness')
-        run([sys.executable,ROOT/'scripts/check.py','--source',source,'--binary',binary,'--output',r/'small-correctness','--reference-png',b/'source/identity-ref.png','--golden',expected,'--sizes',*[n for n in SMALL if n<=a.small_max]],r,'small-correctness',timeout=600)
+        run([sys.executable,ROOT/'scripts/check.py','--source',source,'--binary',binary,'--output',r/'small-correctness','--reference-png',b/'source/identity-ref.png','--golden',goldens,'--sizes',*[n for n in SMALL if n<=a.small_max]],r,'small-correctness',timeout=600)
         assert json.loads((r/'small-correctness/report.json').read_text())['status']=='PASS'
         if 'stabilize_bounded' in source.read_text():
             run([sys.executable,ROOT/'scripts/check_overflow.py','--driver',r/'small-correctness/grid-driver.exe','--output',r/'overflow-checks'],r,'overflow-checks')
@@ -134,7 +134,7 @@ def main():
             subprocess.run(['env','TZ=America/Chicago','date'],check=True)
             if remaining()<limit+60: raise RuntimeError('deadline guard: insufficient time')
             record=dict(variant=a.name,source_commit=commit,run=k,**run_one(binary,r/'timing'/f'n{n}-run{k}',n,0,timeout=limit))
-            compare(expected/f'n{n}'/'identity.png',pathlib.Path(record['directory'])/'identity.png')
+            compare(goldens/f'n{n}'/'identity.png',pathlib.Path(record['directory'])/'identity.png')
             records.append(record)
             with (r/'measurements.csv').open('w',newline='') as f:
                 w=csv.DictWriter(f,fieldnames=list(record)); w.writeheader(); w.writerows(records)
@@ -149,7 +149,7 @@ def main():
             event('target-integer-correctness')
             subprocess.run(['env','TZ=America/Chicago','date'],check=True)
             if remaining()<first['wall_seconds']*1.3+60: raise RuntimeError('insufficient time for target correctness')
-            run([sys.executable,ROOT/'scripts/check.py','--source',source,'--binary',binary,'--output',r/'target-correctness','--reference-png',b/'source/identity-ref.png','--golden',expected,'--sizes',1001,'--target-png',pathlib.Path(first['directory'])/'identity.png'],r,'target-correctness',timeout=480)
+            run([sys.executable,ROOT/'scripts/check.py','--source',source,'--binary',binary,'--output',r/'target-correctness','--reference-png',b/'source/identity-ref.png','--golden',goldens,'--sizes',1001,'--target-png',pathlib.Path(first['directory'])/'identity.png'],r,'target-correctness',timeout=480)
             assert json.loads((r/'target-correctness/report.json').read_text())['status']=='PASS'
             for k in range(2,a.target_runs+1): measure(1001,k,480)
         event('complete','PASS')
