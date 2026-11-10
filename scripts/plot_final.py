@@ -10,6 +10,7 @@ a=p.parse_args();a.output.mkdir(exist_ok=True,parents=True);data=json.loads(a.su
 plt.rcParams.update({'font.size':9,'pdf.fonttype':42,'ps.fonttype':42,'svg.fonttype':'none'})
 labels={'original':'Original','row-intervals':'Row intervals','row-batch':'Rows + batch\n(checked)','row-batch-bounded':'Rows + batch\n(bound)','worklist-unit':'FIFO unit','worklist-batch':'FIFO batch','contiguous':'Contiguous','alternating':'Alternating','padded':'Padded boundary','remainder':'Remainder mask','combined':'Final combined'}
 config=json.loads(a.config.read_text()) if a.config else {}
+labels.update(config.get('labels',{}))
 fig,ax=plt.subplots(figsize=(6.8,2.7),layout='constrained')
 target_names=config.get('target_variants',list(dict.fromkeys(x['variant'] for x in data if x['size']==1001)))
 rows=[next(x for x in data if x['size']==1001 and x['variant']==name) for name in target_names]
