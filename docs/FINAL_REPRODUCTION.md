@@ -118,6 +118,12 @@ and rechecks all target images. On a fresh clone its golden lookup also uses
 | FIFO unit, row parent | `d4c72a42e28ae690f40aefddd819456ec9d4778b` | `hw3-worklist-unit` |
 | FIFO batched, FIFO parent | `c3e5a978bd9b7e7453f795e730f3ebf6a62a0a52` | `hw3-worklist-batch` |
 
+| Contiguous storage | `fa762f0f0cb19e3a2d3dbd24e0a4e093cac86619` | `hw3-contiguous-storage` |
+| Alternating sweeps | `c248ea4ea6ea2c5705e2579fd20e0e47e7599f7d` | `hw3-alternating-sweeps` |
+| Padded boundaries | `1080490846c96703f0734771560e729b9224cf73` | `hw3-padded-boundaries` |
+| Remainder mask | `7c76fc29cad53b7bfa2c9d6351369a7705c07131` | `hw3-remainder-update` |
+| Combined candidate | `245fad1455fe7dd9033b64732e259534c40cd5a0` | `hw3-combined` |
+
 Archive the exact source SHA, not a moving evidence-branch head, for reproduction.
 For worklist screening use the corresponding commit and name with
 `final_experiment.py --small-max 251 --skip-target`; other arguments are as above.
@@ -178,3 +184,59 @@ unless explicitly listed in the final results. Historical cohorts are not paired
 three repetitions are limited evidence, and 0.01-second timer resolution affects
 small-size ratios. See `docs/FINAL_METHODS.md` for exact mathematical arguments,
 correctness scope, profiling limits, legacy large-N limitations and deferred work.
+
+
+## Final source, paired controls and data-only auditing
+
+The selected source and exact final candidate commands are in the final README
+and FINAL_REPORT_NOTES.md. The bounded-batching example above remains an exact
+reproduction of that independent foundation, not a moving alias for the final
+combination. Additional VM directories are recorded in each committed study
+manifest; timestamps in directory names are UTC, while deadline guards use Central.
+
+For each independent post-recovery screen, use `--skip-target` and
+`--parent-study PATH_TO_BOUNDED_STUDY` with `final_experiment.py`. It records three
+seeded parent/candidate blocks at N=101/251/501 separately. The combined screen
+uses the padded study as parent. Promote promising completed screens with
+`python3 scripts/promote_candidate.py STUDY --deadline YYYY-MM-DDTHH:MM:SS`.
+It retains all small checks/timings and adds only one release target run and
+one target integer adapter run. Rejected screens are not promoted.
+
+Once both final candidates have exactly one target observation and target integer
+PASS reports, the actual continuation is:
+
+```bash
+python3 scripts/repeat_pair.py COMBINED_STUDY PADDED_STUDY --runs 3 --seed 598
+```
+
+Only observations 2 and 3 are paired blocks; the initial target observations
+remain historical/unpaired. All individual CSV rows and the exact order are saved.
+The selected candidate then runs `finalize_candidate.py SELECTED_STUDY`. The
+final source is frozen before these release repetitions; the faster three-run
+median determines selection, not a product of independent speedups.
+
+The original deadline stopped bounded batching after two target observations.
+After the extension, `repeat_candidate.py STUDY --resume --runs 3` added only the
+missing third run. Its original stop log and continuation/environment records
+are retained. No previous observation was discarded or silently replaced.
+
+A fresh full clone can audit the compact artifact without ignored grids/binaries:
+
+```bash
+python3 scripts/check_evidence.py measurements/final-study
+mkdir -p results
+python3 scripts/write_report_notes.py measurements/final-study/summary.json \
+  --selection measurements/final-study/selection.json --compact-only \
+  --output results/regenerated-notes.md
+python3 scripts/setup_plotting.py
+results/plot-venv/bin/python scripts/plot_final.py \
+  measurements/final-study/summary.json --config figures/final/plot-config.json \
+  --output results/regenerated-figures
+```
+
+These verify source objects, file hashes, PNG hashes, test reports, numerical
+statistics and speedups, then regenerate notes and plots from committed data.
+The explicit plot config controls readable figure selections; all measured
+configurations remain in the complete tables. File outputs for notes/evidence
+must be new. `check_evidence.py` also requires the checked-out C file to match the
+selected source; use `hw3-final`, not an unrelated experimental branch.
