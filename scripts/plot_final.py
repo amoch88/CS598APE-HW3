@@ -5,29 +5,32 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
-p=argparse.ArgumentParser();p.add_argument('summary',type=pathlib.Path);p.add_argument('--output',type=pathlib.Path,required=True);p.add_argument('--preview-dir',type=pathlib.Path)
+p=argparse.ArgumentParser();p.add_argument('summary',type=pathlib.Path);p.add_argument('--output',type=pathlib.Path,required=True);p.add_argument('--preview-dir',type=pathlib.Path);p.add_argument('--config',type=pathlib.Path)
 a=p.parse_args();a.output.mkdir(exist_ok=True,parents=True);data=json.loads(a.summary.read_text())['measurements']
 plt.rcParams.update({'font.size':9,'pdf.fonttype':42,'ps.fonttype':42,'svg.fonttype':'none'})
-labels={'original':'Original','row-intervals':'Row intervals','row-batch':'Rows + batch\n(checked)','row-batch-bounded':'Rows + batch\n(bound)','worklist-unit':'FIFO unit','worklist-batch':'FIFO batch'}
+labels={'original':'Original','row-intervals':'Row intervals','row-batch':'Rows + batch\n(checked)','row-batch-bounded':'Rows + batch\n(bound)','worklist-unit':'FIFO unit','worklist-batch':'FIFO batch','contiguous':'Contiguous','alternating':'Alternating','padded':'Padded boundary','remainder':'Remainder mask','combined':'Final combined'}
+config=json.loads(a.config.read_text()) if a.config else {}
 fig,ax=plt.subplots(figsize=(6.8,2.7),layout='constrained')
-rows=[x for x in data if x['size']==1001];baseline=next(x['median_seconds'] for x in rows if x['variant']=='original')
+target_names=config.get('target_variants',list(dict.fromkeys(x['variant'] for x in data if x['size']==1001)))
+rows=[next(x for x in data if x['size']==1001 and x['variant']==name) for name in target_names]
+baseline=next(x['median_seconds'] for x in data if x['size']==1001 and x['variant']=='original')
 for i,x in enumerate(rows):
     ax.bar(i,x['speedup_original'],color=plt.get_cmap('tab10')(i),width=.65)
     points=[baseline/v for v in x['values_seconds']]
     if len(points)>1: ax.errorbar(i,x['speedup_original'],yerr=[[x['speedup_original']-min(points)],[max(points)-x['speedup_original']]],fmt='none',ecolor='black',capsize=3)
     ax.scatter([i]*len(points),points,s=11,color='black',zorder=4)
     ax.annotate(f"{x['speedup_original']:.2f}x\nn={x['count']}",(i,x['speedup_original']),xytext=(0,7),textcoords='offset points',ha='center',fontsize=8)
-ax.set_xticks(range(len(rows)),[labels[x['variant']] for x in rows]);ax.set_ylabel('Speedup over original median');ax.set_ylim(0,max(x['speedup_original'] for x in rows)*1.32);ax.grid(axis='y',alpha=.2);ax.set_axisbelow(True)
+ax.set_xticks(range(len(rows)),[labels.get(x['variant'],x['variant']) for x in rows]);ax.set_ylabel('Speedup over original median');ax.set_ylim(0,max(x['speedup_original'] for x in rows)*1.32);ax.grid(axis='y',alpha=.2);ax.set_axisbelow(True)
 for ext in ['pdf','svg']: fig.savefig(a.output/f'speedup-n1001.{ext}')
 if a.preview_dir:
     a.preview_dir.mkdir(parents=True,exist_ok=True);fig.savefig(a.preview_dir/'speedup-n1001.png',dpi=140)
 plt.close(fig)
 fig,ax=plt.subplots(figsize=(6.8,3.0),layout='constrained')
-for name in dict.fromkeys(x['variant'] for x in data):
+for name in config.get('scaling_variants',list(dict.fromkeys(x['variant'] for x in data))):
     rows=sorted((x for x in data if x['variant']==name),key=lambda x:x['size'])
     sizes=[x['size'] for x in rows];med=[x['median_seconds'] for x in rows]
     low=[x['median_seconds']-x['min_seconds'] for x in rows];high=[x['max_seconds']-x['median_seconds'] for x in rows]
-    ax.errorbar(sizes,med,yerr=[low,high],marker='o',markersize=3,capsize=2,label=labels[name].replace('\n',' '))
+    ax.errorbar(sizes,med,yerr=[low,high],marker='o',markersize=3,capsize=2,label=labels.get(name,name).replace('\n',' '))
 ax.set_yscale('log');ax.set_xscale('log');ax.set_xticks([101,251,501,1001],[101,251,501,1001]);ax.set_xlabel('Grid side N');ax.set_ylabel('End-to-end seconds (log scale)');ax.grid(alpha=.2);ax.legend(fontsize=7,ncol=2)
 for ext in ['pdf','svg']:fig.savefig(a.output/f'runtime-scaling.{ext}')
 if a.preview_dir: fig.savefig(a.preview_dir/'runtime-scaling.png',dpi=140)
