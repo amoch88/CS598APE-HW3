@@ -28,15 +28,16 @@ static void save_phase(void) {
 """
 def instrument(source):
     s=source.read_text()
-    s=s.replace('static void stabilize() {',SUPPORT+'\nstatic void stabilize() {\n  memset(&work,0,sizeof(work));',1)
+    s=s.replace('struct active_row {',SUPPORT+'\nstruct active_row {',1)
+    s=s.replace('static void stabilize() {','static void stabilize() {\n  memset(&work,0,sizeof(work));',1)
     if 'while (pending)' in s:
         s=s.replace('  while (pending) {','  while (pending) {\n    work.visits++;',1)
     else:
-        s=s.replace('    changed = 0;','    changed = 0;\n    work.sweeps++;',1)
-        s=s.replace('        if (grid[i][j] < 4)','        work.visits++;\n        if (grid[i][j] < 4)',1)
+        s=s.replace('    changed = 0;','    changed = 0;\n    work.sweeps++;')
+        s=s.replace('        if (grid[i][j] < 4)','        work.visits++;\n        if (grid[i][j] < 4)')
     anchor='grid[i][j] -= 4 * q;'
-    if s.count(anchor)!=1: raise ValueError('missing unique toppling instrumentation anchor')
-    s=s.replace(anchor,'work.events++; work.unit_topplings += (uint64_t)q;\n        '+anchor,1)
+    if s.count(anchor) not in [1,2]: raise ValueError('unexpected toppling instrumentation anchors')
+    s=s.replace(anchor,'work.events++; work.unit_topplings += (uint64_t)q;\n        '+anchor)
     if s.count('  stabilize();')!=2: raise ValueError('expected two identity phases')
     return s.replace('  stabilize();','  stabilize();\n  save_phase();')
 
@@ -88,6 +89,8 @@ def main():
         event('small-correctness')
         run([sys.executable,ROOT/'scripts/check.py','--source',source,'--binary',binary,'--output',r/'small-correctness','--reference-png',b/'source/identity-ref.png','--golden',row/'expected','--sizes',*[n for n in SMALL if n<=a.small_max]],r,'small-correctness',timeout=600)
         assert json.loads((r/'small-correctness/report.json').read_text())['status']=='PASS'
+        if 'stabilize_bounded' in source.read_text():
+            run([sys.executable,ROOT/'scripts/check_overflow.py','--driver',r/'small-correctness/grid-driver.exe','--output',r/'overflow-checks'],r,'overflow-checks')
         event('both-stages-and-work-counters')
         diag=r/'diagnostic.c'; diag.write_text(instrument(source)); exe=r/'bin/diagnostic.exe'
         run(['gcc','-O3','-g','-Werror','-I',r/'source',diag,'-o',exe,'-lm'],r,'build-diagnostic',pin=False)
