@@ -72,30 +72,58 @@ static void render(char *filename) {
   free(pixels);
 }
 
+struct active_row {
+  int first;
+  int last;
+};
+
+// The disk intersects each row in one interval; intersecting with the original
+// mouth prefix keeps it contiguous. Widen before squaring to avoid overflow.
+static struct active_row *precompute_active_rows(void) {
+  struct active_row *rows = malloc((size_t)N * sizeof(*rows));
+  if (!rows)
+    die("malloc failed for active row intervals");
+  int64_t center = N / 2;
+  int64_t radius_squared = center * center;
+  for (int i = 0; i < N; ++i) {
+    rows[i].first = 0;
+    rows[i].last = -1;
+    int64_t di = (int64_t)i - center;
+    for (int j = 0; j <= MAX(i, N - 1 - i); ++j) {
+      int64_t dj = (int64_t)j - center;
+      if (di * di + dj * dj <= radius_squared) {
+        if (rows[i].last < 0)
+          rows[i].first = j;
+        rows[i].last = j;
+      }
+    }
+  }
+  return rows;
+}
+
 static void stabilize() {
+  struct active_row *rows = precompute_active_rows();
   int changed = 0;
   do {
     changed = 0;
     for (int i = 0; i < N; ++i) {
-      for (int j = 0; j <= MAX(i, N - 1 - i); ++j) {
-        if ((i - N / 2) * (i - N / 2) + (j - N / 2) * (j - N / 2) <=
-            (N / 2) * (N / 2)) {
-          if (grid[i][j] < 4)
-            continue;
-          changed = 1; // topple it
-          grid[i][j] -= 4;
-          if (i > 0)
-            grid[i - 1][j]++;
-          if (j > 0)
-            grid[i][j - 1]++;
-          if (i < N - 1)
-            grid[i + 1][j]++;
-          if (j < N - 1)
-            grid[i][j + 1]++;
-        }
+      for (int j = rows[i].first; j <= rows[i].last; ++j) {
+        if (grid[i][j] < 4)
+          continue;
+        changed = 1; // topple it
+        grid[i][j] -= 4;
+        if (i > 0)
+          grid[i - 1][j]++;
+        if (j > 0)
+          grid[i][j - 1]++;
+        if (i < N - 1)
+          grid[i + 1][j]++;
+        if (j < N - 1)
+          grid[i][j + 1]++;
       }
     }
   } while (changed);
+  free(rows);
 }
 
 void find_identity() {
