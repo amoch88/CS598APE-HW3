@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <math.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,28 +102,76 @@ static struct active_row *precompute_active_rows(void) {
   return rows;
 }
 
+struct queued_cell { int i, j; };
+struct frontier {
+  struct queued_cell *cells;
+  unsigned char *scheduled;
+  const struct active_row *rows;
+  size_t head, tail, pending, capacity;
+};
+
+static void add_grains(int *cell, int q) {
+  if (*cell > INT_MAX - q)
+    die("integer overflow in grain accumulation");
+  *cell += q;
+}
+
+// At most one entry per active cell; storage is bounded by active domain size.
+static void schedule(struct frontier *f, int i, int j) {
+  if (j < f->rows[i].first || j > f->rows[i].last || grid[i][j] < 4)
+    return;
+  size_t id = (size_t)i * (size_t)N + (size_t)j;
+  if (f->scheduled[id])
+    return;
+  if (f->pending == f->capacity)
+    die("worklist capacity invariant violated");
+  f->scheduled[id] = 1;
+  f->cells[f->tail] = (struct queued_cell){i,j};
+  if (++f->tail == f->capacity) f->tail = 0;
+  ++f->pending;
+}
+
+static void receive(struct frontier *f, int i, int j, int q) {
+  add_grains(&grid[i][j],q); // Includes inactive sink counters.
+  schedule(f,i,j);
+}
+
 static void stabilize() {
   struct active_row *rows = precompute_active_rows();
-  int changed = 0;
-  do {
-    changed = 0;
-    for (int i = 0; i < N; ++i) {
-      for (int j = rows[i].first; j <= rows[i].last; ++j) {
-        if (grid[i][j] < 4)
-          continue;
-        changed = 1; // topple it
-        grid[i][j] -= 4;
-        if (i > 0)
-          grid[i - 1][j]++;
-        if (j > 0)
-          grid[i][j - 1]++;
-        if (i < N - 1)
-          grid[i + 1][j]++;
-        if (j < N - 1)
-          grid[i][j + 1]++;
-      }
-    }
-  } while (changed);
+  size_t capacity = 0;
+  for (int i=0;i<N;++i)
+    if (rows[i].last >= rows[i].first)
+      capacity += (size_t)(rows[i].last - rows[i].first + 1);
+  if (!capacity || capacity > SIZE_MAX / sizeof(struct queued_cell))
+    die("invalid worklist capacity");
+  struct frontier f = {0};
+  f.rows = rows; f.capacity = capacity;
+  f.cells = malloc(capacity * sizeof(*f.cells));
+  f.scheduled = calloc((size_t)N * (size_t)N, sizeof(*f.scheduled));
+  if (!f.cells || !f.scheduled) die("worklist allocation failed");
+  for (int i=0;i<N;++i)
+    for (int j=rows[i].first;j<=rows[i].last;++j)
+      schedule(&f,i,j);
+  size_t pending = f.pending;
+  while (pending) {
+    struct queued_cell cell = f.cells[f.head];
+    if (++f.head == capacity) f.head = 0;
+    --f.pending;
+    int i = cell.i, j = cell.j;
+    f.scheduled[(size_t)i * (size_t)N + (size_t)j] = 0;
+    // Scheduled heights cannot decrease before their unique entry is popped.
+    int q = 1;
+    grid[i][j] -= 4 * q;
+    if (i > 0) receive(&f,i-1,j,q);
+    if (j > 0) receive(&f,i,j-1,q);
+    if (i < N-1) receive(&f,i+1,j,q);
+    if (j < N-1) receive(&f,i,j+1,q);
+    // Unit mode may leave this cell unstable; batched mode leaves a remainder.
+    schedule(&f,i,j);
+    pending = f.pending;
+  }
+  free(f.scheduled);
+  free(f.cells);
   free(rows);
 }
 
