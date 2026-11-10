@@ -1,0 +1,10 @@
+{
+  "name": "worklist-unit",
+  "source_commit": "d4c72a42e28ae690f40aefddd819456ec9d4778b",
+  "cpu": 0,
+  "flags": "-O3 -lm -g -Werror",
+  "baseline": "/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline",
+  "row_results": "/home/am88/CS598APE-HW3/results/20261110T023926Z-row-intervals",
+  "target_runs_requested": 1,
+  "deadline": "2026-11-09T22:08:00"
+}

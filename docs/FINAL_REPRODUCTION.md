@@ -117,7 +117,6 @@ and rechecks all target images. On a fresh clone its golden lookup also uses
 | Rows + bounded batching | `50970858a53845220b44f604e62223c2ea7f1ea1` | `hw3-batch-bounded` |
 | FIFO unit, row parent | `d4c72a42e28ae690f40aefddd819456ec9d4778b` | `hw3-worklist-unit` |
 | FIFO batched, FIFO parent | `c3e5a978bd9b7e7453f795e730f3ebf6a62a0a52` | `hw3-worklist-batch` |
-
 | Contiguous storage | `fa762f0f0cb19e3a2d3dbd24e0a4e093cac86619` | `hw3-contiguous-storage` |
 | Alternating sweeps | `c248ea4ea6ea2c5705e2579fd20e0e47e7599f7d` | `hw3-alternating-sweeps` |
 | Padded boundaries | `1080490846c96703f0734771560e729b9224cf73` | `hw3-padded-boundaries` |

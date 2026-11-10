@@ -1,0 +1,13 @@
+{
+  "start_utc": "2026-11-10T03:52:43.242274+00:00",
+  "size": 101,
+  "cpu": 0,
+  "wall_seconds": 0.03,
+  "user_seconds": 0.03,
+  "system_seconds": 0.0,
+  "max_rss_kib": 2620,
+  "exit_status": 0,
+  "launcher_wall_seconds": 0.064314462,
+  "png_sha256": "f40a04e8034d3d6d3988af3ea0da2eb17756c1b830dd09fa5c1864c7493f3fb4",
+  "directory": "/home/am88/CS598APE-HW3/results/20261110T035148Z-batch-bounded/timing/preflight-n101"
+}

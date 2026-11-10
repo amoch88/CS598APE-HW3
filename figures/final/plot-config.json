@@ -1,0 +1,25 @@
+{
+  "target_variants": [
+    "original",
+    "row-intervals",
+    "row-batch-bounded",
+    "padded",
+    "combined"
+  ],
+  "scaling_variants": [
+    "original",
+    "row-intervals",
+    "row-batch-bounded",
+    "padded",
+    "combined",
+    "worklist-batch"
+  ],
+  "labels": {
+    "original": "Original",
+    "row-intervals": "+ Row\nintervals",
+    "row-batch-bounded": "+ Bounded\nbatching",
+    "padded": "+ Padded\nboundaries",
+    "combined": "+ Alternating\nsweeps (final)"
+  },
+  "caption": "Cumulative target configurations; every stage retains its predecessors. Whiskers show observed min-max ranges, not confidence intervals. Scaling includes a rejected FIFO variant only at measured sizes. All configurations and raw observations remain in the complete tables."
+}

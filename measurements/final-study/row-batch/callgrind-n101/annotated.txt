@@ -1,0 +1,652 @@
+--------------------------------------------------------------------------------
+Profile data file '/home/am88/CS598APE-HW3/results/20261110T033438Z-batch/callgrind-n101/callgrind.out' (creator: callgrind-3.26.0)
+--------------------------------------------------------------------------------
+I1 cache: 
+D1 cache: 
+LL cache: 
+Timerange: Basic block 0 - 49953200
+Trigger: Program termination
+Profiled target:  /home/am88/CS598APE-HW3/results/20261110T033438Z-batch/source/sandpile.exe 101 (PID 2934, part 1)
+Events recorded:  Ir
+Events shown:     Ir
+Event sort order: Ir
+Thresholds:       99
+Include dirs:     
+User annotated:   
+Auto-annotation:  on
+
+--------------------------------------------------------------------------------
+Ir                   
+--------------------------------------------------------------------------------
+251,023,325 (100.0%)  PROGRAM TOTALS
+
+--------------------------------------------------------------------------------
+Ir                    file:function
+--------------------------------------------------------------------------------
+245,207,012 (97.68%)  results/20261110T033438Z-batch/source/./sandpile.c:stabilize [/home/am88/CS598APE-HW3/results/20261110T033438Z-batch/source/sandpile.exe]
+  4,028,411 ( 1.60%)  results/20261110T033438Z-batch/source/./stb_image_write.h:stbi_zlib_compress [/home/am88/CS598APE-HW3/results/20261110T033438Z-batch/source/sandpile.exe]
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: results/20261110T033438Z-batch/source/./stb_image_write.h
+--------------------------------------------------------------------------------
+Ir                 
+
+-- line 319 ----------------------------------------
+        .           #else
+        .              f = _wfopen(wFilename, wMode);
+        .           #endif
+        .           
+        .           #elif defined(_MSC_VER) && _MSC_VER >= 1400
+        .              if (0 != fopen_s(&f, filename, mode))
+        .                 f=0;
+        .           #else
+        5 ( 0.00%)     f = fopen(filename, mode);
+      784 ( 0.00%)  => ???:0x0000000004001270 (1x)
+        .           #endif
+        .              return f;
+        .           }
+        .           
+        .           static int stbi__start_write_file(stbi__write_context *s, const char *filename)
+        .           {
+        .              FILE *f = stbiw__fopen(filename, "wb");
+        .              stbi__start_write_callbacks(s, stbi__stdio_write, (void *) f);
+-- line 335 ----------------------------------------
+-- line 820 ----------------------------------------
+        .           #define stbiw__sbgrow(a,n)  stbiw__sbgrowf((void **) &(a), (n), sizeof(*(a)))
+        .           
+        .           #define stbiw__sbpush(a, v)      (stbiw__sbmaybegrow(a,1), (a)[stbiw__sbn(a)++] = (v))
+        .           #define stbiw__sbcount(a)        ((a) ? stbiw__sbn(a) : 0)
+        .           #define stbiw__sbfree(a)         ((a) ? STBIW_FREE(stbiw__sbraw(a)),0 : 0)
+        .           
+        .           static void *stbiw__sbgrowf(void **arr, int increment, int itemsize)
+        .           {
+      224 ( 0.00%)     int m = *arr ? 2*stbiw__sbm(*arr)+increment : increment+1;
+    2,269 ( 0.00%)     void *p = STBIW_REALLOC_SIZED(*arr ? stbiw__sbraw(*arr) : 0, *arr ? (stbiw__sbm(*arr)*itemsize + sizeof(int)*2) : 0, itemsize * m + sizeof(int)*2);
+   85,272 ( 0.03%)  => ???:0x0000000004001240 (215x)
+   35,149 ( 0.01%)  => ???:0x0000000004001230 (251x)
+      952 ( 0.00%)     STBIW_ASSERT(p);
+        .              if (p) {
+        .                 if (!*arr) ((int *) p)[1] = 0;
+      939 ( 0.00%)        *arr = (void *) ((int *) p + 2);
+      941 ( 0.00%)        stbiw__sbm(*arr) = m;
+        .              }
+      436 ( 0.00%)     return *arr;
+        .           }
+        .           
+        .           static unsigned char *stbiw__zlib_flushf(unsigned char *data, unsigned int *bitbuffer, int *bitcount)
+   30,936 ( 0.01%)  {
+   26,163 ( 0.01%)     while (*bitcount >= 8) {
+   58,552 ( 0.02%)        stbiw__sbpush(data, STBIW_UCHAR(*bitbuffer));
+    5,383 ( 0.00%)        *bitbuffer >>= 8;
+   16,149 ( 0.01%)        *bitcount -= 8;
+        .              }
+        .              return data;
+   22,319 ( 0.01%)  }
+        .           
+        .           static int stbiw__zlib_bitrev(int code, int codebits)
+        .           {
+        .              int res=0;
+        .              while (codebits--) {
+   61,165 ( 0.02%)        res = (res << 1) | (code & 1);
+   30,991 ( 0.01%)        code >>= 1;
+        .              }
+        .              return res;
+        .           }
+        .           
+        .           static unsigned int stbiw__zlib_countm(unsigned char *a, unsigned char *b, int limit)
+        .           {
+        .              int i;
+1,803,350 ( 0.72%)     for (i=0; i < limit && i < 258; ++i)
+  812,415 ( 0.32%)        if (a[i] != b[i]) break;
+        .              return i;
+        .           }
+        .           
+        .           static unsigned int stbiw__zhash(unsigned char *data)
+        .           {
+   24,038 ( 0.01%)     stbiw_uint32 hash = data[0] + (data[1] << 8) + (data[2] << 16);
+    9,132 ( 0.00%)     hash ^= hash << 3;
+   13,698 ( 0.01%)     hash += hash >> 5;
+   13,698 ( 0.01%)     hash ^= hash << 4;
+   13,698 ( 0.01%)     hash += hash >> 17;
+   13,698 ( 0.01%)     hash ^= hash << 25;
+   13,698 ( 0.01%)     hash += hash >> 6;
+        .              return hash;
+        .           }
+        .           
+        .           #define stbiw__zlib_flush() (out = stbiw__zlib_flushf(out, &bitbuf, &bitcount))
+        .           #define stbiw__zlib_add(code,codebits) \
+        .                 (bitbuf |= (code) << bitcount, bitcount += (codebits), stbiw__zlib_flush())
+        .           #define stbiw__zlib_huffa(b,c)  stbiw__zlib_add(stbiw__zlib_bitrev(b,c),c)
+        .           // default huffman tables
+-- line 883 ----------------------------------------
+-- line 888 ----------------------------------------
+        .           #define stbiw__zlib_huff(n)  ((n) <= 143 ? stbiw__zlib_huff1(n) : (n) <= 255 ? stbiw__zlib_huff2(n) : (n) <= 279 ? stbiw__zlib_huff3(n) : stbiw__zlib_huff4(n))
+        .           #define stbiw__zlib_huffb(n) ((n) <= 143 ? stbiw__zlib_huff1(n) : stbiw__zlib_huff2(n))
+        .           
+        .           #define stbiw__ZHASH   16384
+        .           
+        .           #endif // STBIW_ZLIB_COMPRESS
+        .           
+        .           STBIWDEF unsigned char * stbi_zlib_compress(unsigned char *data, int data_len, int *out_len, int quality)
+       12 ( 0.00%)  {
+        .           #ifdef STBIW_ZLIB_COMPRESS
+        .              // user provided a zlib compress implementation, use that
+        .              return STBIW_ZLIB_COMPRESS(data, data_len, out_len, quality);
+        .           #else // use builtin
+        .              static unsigned short lengthc[] = { 3,4,5,6,7,8,9,10,11,13,15,17,19,23,27,31,35,43,51,59,67,83,99,115,131,163,195,227,258, 259 };
+        .              static unsigned char  lengtheb[]= { 0,0,0,0,0,0,0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4,  4,  5,  5,  5,  5,  0 };
+        .              static unsigned short distc[]   = { 1,2,3,4,5,7,9,13,17,25,33,49,65,97,129,193,257,385,513,769,1025,1537,2049,3073,4097,6145,8193,12289,16385,24577, 32768 };
+        .              static unsigned char  disteb[]  = { 0,0,0,0,1,1,2,2,3,3,4,4,5,5,6,6,7,7,8,8,9,9,10,10,11,11,12,12,13,13 };
+        .              unsigned int bitbuf=0;
+        .              int i,j, bitcount=0;
+        .              unsigned char *out = NULL;
+        6 ( 0.00%)     unsigned char ***hash_table = (unsigned char***) STBIW_MALLOC(stbiw__ZHASH * sizeof(unsigned char**));
+      331 ( 0.00%)  => ???:0x00000000040011f0 (1x)
+        2 ( 0.00%)     if (hash_table == NULL)
+        .                 return NULL;
+        5 ( 0.00%)     if (quality < 5) quality = 5;
+        .           
+        1 ( 0.00%)     stbiw__sbpush(out, 0x78);   // DEFLATE 32K window
+        4 ( 0.00%)     stbiw__sbpush(out, 0x5e);   // FLEVEL = 1
+       10 ( 0.00%)     stbiw__zlib_add(1,1);  // BFINAL = 1
+        4 ( 0.00%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (1x)
+       10 ( 0.00%)     stbiw__zlib_add(1,2);  // BTYPE = 1 -- fixed huffman
+        4 ( 0.00%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (1x)
+        .           
+        .              for (i=0; i < stbiw__ZHASH; ++i)
+        .                 hash_table[i] = NULL;
+        .           
+        .              i=0;
+    4,829 ( 0.00%)     while (i < data_len-3) {
+        .                 // hash next 3 bytes of data to be compressed
+   19,971 ( 0.01%)        int h = stbiw__zhash(data+i)&(stbiw__ZHASH-1), best=3;
+    2,161 ( 0.00%)        unsigned char *bestloc = 0;
+    9,644 ( 0.00%)        unsigned char **hlist = hash_table[h];
+    6,983 ( 0.00%)        int n = stbiw__sbcount(hlist);
+   70,997 ( 0.03%)        for (j=0; j < n; ++j) {
+  117,608 ( 0.05%)           if (hlist[j]-data > i-32768) { // if entry lies within window
+   83,963 ( 0.03%)              int d = stbiw__zlib_countm(hlist[j], data+i, data_len-i);
+   66,675 ( 0.03%)              if (d >= best) { best=d; bestloc=hlist[j]; }
+        .                    }
+        .                 }
+        .                 // when hash table entry is too long, delete half the entries
+   10,807 ( 0.00%)        if (hash_table[h] && stbiw__sbn(hash_table[h]) == 2*quality) {
+      391 ( 0.00%)           STBIW_MEMMOVE(hash_table[h], hash_table[h]+quality, sizeof(hash_table[h][0])*quality);
+      388 ( 0.00%)           stbiw__sbn(hash_table[h]) = quality;
+        .                 }
+   15,999 ( 0.01%)        stbiw__sbpush(hash_table[h],data+i);
+        .           
+    4,322 ( 0.00%)        if (bestloc) {
+        .                    // "lazy matching" - check match at *next* byte, and if it's better, do cur byte as literal
+    2,155 ( 0.00%)           h = stbiw__zhash(data+i+1)&(stbiw__ZHASH-1);
+    6,465 ( 0.00%)           hlist = hash_table[h];
+    5,529 ( 0.00%)           n = stbiw__sbcount(hlist);
+   21,260 ( 0.01%)           for (j=0; j < n; ++j) {
+   36,127 ( 0.01%)              if (hlist[j]-data > i-32767) {
+    4,876 ( 0.00%)                 int e = stbiw__zlib_countm(hlist[j], data+i+1, data_len-i-1);
+   12,988 ( 0.01%)                 if (e > best) { // if next match is better, bail on current match
+        .                             bestloc = NULL;
+        .                             break;
+        .                          }
+        .                       }
+        .                    }
+        .                 }
+        .           
+        .                 if (bestloc) {
+    1,935 ( 0.00%)           int d = (int) (data+i - bestloc); // distance back
+    9,675 ( 0.00%)           STBIW_ASSERT(d <= 32767 && best <= 258);
+   89,706 ( 0.04%)           for (j=0; best > lengthc[j+1]-1; ++j);
+   27,626 ( 0.01%)           stbiw__zlib_huff(j+257);
+   51,994 ( 0.02%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (1,935x)
+   16,084 ( 0.01%)           if (lengtheb[j]) stbiw__zlib_add(best - lengthc[j], lengtheb[j]);
+    6,921 ( 0.00%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (596x)
+  217,212 ( 0.09%)           for (j=0; d > distc[j+1]-1; ++j);
+   17,415 ( 0.01%)           stbiw__zlib_add(stbiw__zlib_bitrev(j,5),5);
+   37,565 ( 0.01%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (1,935x)
+   36,289 ( 0.01%)           if (disteb[j]) stbiw__zlib_add(d - distc[j], disteb[j]);
+   51,829 ( 0.02%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (1,901x)
+    1,935 ( 0.00%)           i += best;
+        .                 } else {
+    7,318 ( 0.00%)           stbiw__zlib_huffb(data[i]);
+   15,381 ( 0.01%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (476x)
+      476 ( 0.00%)           ++i;
+        .                 }
+        .              }
+        .              // write out final bytes
+        2 ( 0.00%)     for (;i < data_len; ++i)
+        .                 stbiw__zlib_huffb(data[i]);
+        8 ( 0.00%)     stbiw__zlib_huff(256); // end of block
+       29 ( 0.00%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (1x)
+        .              // pad with 0 bits to byte boundary
+       23 ( 0.00%)     while (bitcount)
+       30 ( 0.00%)        stbiw__zlib_add(0,1);
+       45 ( 0.00%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__zlib_flushf (5x)
+        .           
+   49,156 ( 0.02%)     for (i=0; i < stbiw__ZHASH; ++i)
+   49,652 ( 0.02%)        (void) stbiw__sbfree(hash_table[i]);
+   35,392 ( 0.01%)  => ???:0x0000000004001180 (250x)
+        2 ( 0.00%)     STBIW_FREE(hash_table);
+       88 ( 0.00%)  => ???:0x0000000004001180 (1x)
+        .           
+        .              // store uncompressed instead if compression was worse
+       13 ( 0.00%)     if (stbiw__sbn(out) > data_len + 2 + ((data_len+32766)/32767)*5) {
+        .                 stbiw__sbn(out) = 2;  // truncate to DEFLATE 32K window and FLEVEL = 1
+        .                 for (j = 0; j < data_len;) {
+        .                    int blocklen = data_len - j;
+        .                    if (blocklen > 32767) blocklen = 32767;
+        .                    stbiw__sbpush(out, data_len - j == blocklen); // BFINAL = ?, BTYPE = 0 -- no compression
+        .                    stbiw__sbpush(out, STBIW_UCHAR(blocklen)); // LEN
+        .                    stbiw__sbpush(out, STBIW_UCHAR(blocklen >> 8));
+        .                    stbiw__sbpush(out, STBIW_UCHAR(~blocklen)); // NLEN
+-- line 993 ----------------------------------------
+-- line 996 ----------------------------------------
+        .                    stbiw__sbn(out) += blocklen;
+        .                    j += blocklen;
+        .                 }
+        .              }
+        .           
+        .              {
+        .                 // compute adler32 on input
+        .                 unsigned int s1=1, s2=0;
+        9 ( 0.00%)        int blocklen = (int) (data_len % 5552);
+        .                 j=0;
+       14 ( 0.00%)        while (j < data_len) {
+  184,283 ( 0.07%)           for (i=0; i < blocklen; ++i) { s1 += data[j+i]; s2 += s1; }
+       66 ( 0.00%)           s1 %= 65521; s2 %= 65521;
+        6 ( 0.00%)           j += blocklen;
+        .                    blocklen = 5552;
+        .                 }
+        9 ( 0.00%)        stbiw__sbpush(out, STBIW_UCHAR(s2 >> 8));
+        7 ( 0.00%)        stbiw__sbpush(out, STBIW_UCHAR(s2));
+        8 ( 0.00%)        stbiw__sbpush(out, STBIW_UCHAR(s1 >> 8));
+        7 ( 0.00%)        stbiw__sbpush(out, STBIW_UCHAR(s1));
+        .              }
+        3 ( 0.00%)     *out_len = stbiw__sbn(out);
+        .              // make returned pointer freeable
+        .              STBIW_MEMMOVE(stbiw__sbraw(out), out, *out_len);
+        .              return (unsigned char *) stbiw__sbraw(out);
+        .           #endif // STBIW_ZLIB_COMPRESS
+       12 ( 0.00%)  }
+        .           
+        .           static unsigned int stbiw__crc32(unsigned char *buffer, int len)
+        .           {
+        .           #ifdef STBIW_CRC32
+        .               return STBIW_CRC32(buffer, len);
+        .           #else
+        .              static unsigned int crc_table[256] =
+        .              {
+-- line 1030 ----------------------------------------
+-- line 1057 ----------------------------------------
+        .                 0x86D3D2D4, 0xF1D4E242, 0x68DDB3F8, 0x1FDA836E, 0x81BE16CD, 0xF6B9265B, 0x6FB077E1, 0x18B74777,
+        .                 0x88085AE6, 0xFF0F6A70, 0x66063BCA, 0x11010B5C, 0x8F659EFF, 0xF862AE69, 0x616BFFD3, 0x166CCF45,
+        .                 0xA00AE278, 0xD70DD2EE, 0x4E048354, 0x3903B3C2, 0xA7672661, 0xD06016F7, 0x4969474D, 0x3E6E77DB,
+        .                 0xAED16A4A, 0xD9D65ADC, 0x40DF0B66, 0x37D83BF0, 0xA9BCAE53, 0xDEBB9EC5, 0x47B2CF7F, 0x30B5FFE9,
+        .                 0xBDBDF21C, 0xCABAC28A, 0x53B39330, 0x24B4A3A6, 0xBAD03605, 0xCDD70693, 0x54DE5729, 0x23D967BF,
+        .                 0xB3667A2E, 0xC4614AB8, 0x5D681B02, 0x2A6F2B94, 0xB40BBE37, 0xC30C8EA1, 0x5A05DF1B, 0x2D02EF8D
+        .              };
+        .           
+        4 ( 0.00%)     unsigned int crc = ~0u;
+        .              int i;
+   16,181 ( 0.01%)     for (i=0; i < len; ++i)
+   32,426 ( 0.01%)        crc = (crc >> 8) ^ crc_table[buffer[i] ^ (crc & 0xff)];
+        4 ( 0.00%)     return ~crc;
+        .           #endif
+        .           }
+        .           
+        .           #define stbiw__wpng4(o,a,b,c,d) ((o)[0]=STBIW_UCHAR(a),(o)[1]=STBIW_UCHAR(b),(o)[2]=STBIW_UCHAR(c),(o)[3]=STBIW_UCHAR(d),(o)+=4)
+        .           #define stbiw__wp32(data,v) stbiw__wpng4(data, (v)>>24,(v)>>16,(v)>>8,(v));
+        .           #define stbiw__wptag(data,s) stbiw__wpng4(data, s[0],s[1],s[2],s[3])
+        .           
+        .           static void stbiw__wpcrc(unsigned char **data, int len)
+        .           {
+        6 ( 0.00%)     unsigned int crc = stbiw__crc32(*data - len - 4, len+4);
+       25 ( 0.00%)     stbiw__wp32(*data, crc);
+        .           }
+        .           
+        .           static unsigned char stbiw__paeth(int a, int b, int c)
+        .           {
+  209,064 ( 0.08%)     int p = a + b - c, pa = abs(p-a), pb = abs(p-b), pc = abs(p-c);
+   79,117 ( 0.03%)     if (pa <= pb && pa <= pc) return STBIW_UCHAR(a);
+   10,416 ( 0.00%)     if (pb <= pc) return STBIW_UCHAR(b);
+        .              return STBIW_UCHAR(c);
+        .           }
+        .           
+        .           // @OPTIMIZE: provide an option that always forces left-predict or paeth predict
+        .           static void stbiw__encode_png_line(unsigned char *pixels, int stride_bytes, int width, int height, int y, int n, int filter_type, signed char *line_buffer)
+    6,060 ( 0.00%)  {
+        .              static int mapping[] = { 0,1,2,3,4 };
+        .              static int firstmap[] = { 0,1,0,5,6 };
+    2,424 ( 0.00%)     int *mymap = (y != 0) ? mapping : firstmap;
+        .              int i;
+    1,212 ( 0.00%)     int type = mymap[filter_type];
+    3,636 ( 0.00%)     unsigned char *z = pixels + stride_bytes * (stbi__flip_vertically_on_write ? height-1-y : y);
+        .              int signed_stride = stbi__flip_vertically_on_write ? -stride_bytes : stride_bytes;
+        .           
+    1,212 ( 0.00%)     if (type==0) {
+      208 ( 0.00%)        memcpy(line_buffer, z, width*n);
+        .                 return;
+        .              }
+        .           
+        .              // first loop isn't optimized since it's just one pixel
+   10,378 ( 0.00%)     for (i = 0; i < n; ++i) {
+        9 ( 0.00%)        switch (type) {
+      774 ( 0.00%)           case 1: line_buffer[i] = z[i]; break;
+    2,499 ( 0.00%)           case 2: line_buffer[i] = z[i] - z[i-signed_stride]; break;
+    2,300 ( 0.00%)           case 3: line_buffer[i] = z[i] - (z[i-signed_stride]>>1); break;
+    1,984 ( 0.00%)           case 4: line_buffer[i] = (signed char) (z[i] - stbiw__paeth(0,z[i-signed_stride],0)); break;
+        6 ( 0.00%)           case 5: line_buffer[i] = z[i]; break;
+        6 ( 0.00%)           case 6: line_buffer[i] = z[i]; break;
+        .                 }
+        .              }
+        5 ( 0.00%)     switch (type) {
+   27,509 ( 0.01%)        case 1: for (i=n; i < width*n; ++i) line_buffer[i] = z[i] - z[i-n]; break;
+   31,680 ( 0.01%)        case 2: for (i=n; i < width*n; ++i) line_buffer[i] = z[i] - z[i-signed_stride]; break;
+   47,236 ( 0.02%)        case 3: for (i=n; i < width*n; ++i) line_buffer[i] = z[i] - ((z[i-n] + z[i-signed_stride])>>1); break;
+  210,676 ( 0.08%)        case 4: for (i=n; i < width*n; ++i) line_buffer[i] = z[i] - stbiw__paeth(z[i-n], z[i-signed_stride], z[i-signed_stride-n]); break;
+      662 ( 0.00%)        case 5: for (i=n; i < width*n; ++i) line_buffer[i] = z[i] - (z[i-n]>>1); break;
+      211 ( 0.00%)        case 6: for (i=n; i < width*n; ++i) line_buffer[i] = z[i] - stbiw__paeth(z[i-n], 0,0); break;
+        .              }
+    4,138 ( 0.00%)  }
+        .           
+        .           STBIWDEF unsigned char *stbi_write_png_to_mem(const unsigned char *pixels, int stride_bytes, int x, int y, int n, int *out_len)
+       14 ( 0.00%)  {
+        3 ( 0.00%)     int force_filter = stbi_write_force_png_filter;
+        3 ( 0.00%)     int ctype[5] = { -1, 0, 4, 2, 6 };
+        2 ( 0.00%)     unsigned char sig[8] = { 137,80,78,71,13,10,26,10 };
+        .              unsigned char *out,*o, *filt, *zlib;
+        .              signed char *line_buffer;
+        .              int j,zlen;
+        .           
+        .              if (stride_bytes == 0)
+        5 ( 0.00%)        stride_bytes = x * n;
+        .           
+        .              if (force_filter >= 5) {
+        5 ( 0.00%)        force_filter = -1;
+        .              }
+        .           
+       10 ( 0.00%)     filt = (unsigned char *) STBIW_MALLOC((x*n+1) * y); if (!filt) return 0;
+      146 ( 0.00%)  => ???:0x0000000004001230 (1x)
+        7 ( 0.00%)     line_buffer = (signed char *) STBIW_MALLOC(x * n); if (!line_buffer) { STBIW_FREE(filt); return 0; }
+      168 ( 0.00%)  => ???:0x0000000004001230 (1x)
+      418 ( 0.00%)     for (j=0; j < y; ++j) {
+        .                 int filter_type;
+      303 ( 0.00%)        if (force_filter > -1) {
+        .                    filter_type = force_filter;
+        .                    stbiw__encode_png_line((unsigned char*)(pixels), stride_bytes, x, y, j, n, force_filter, line_buffer);
+        .                 } else { // Estimate the best filter by running through all of them:
+        .                    int best_filter = 0, best_filter_val = 0x7fffffff, est, i;
+    2,020 ( 0.00%)           for (filter_type = 0; filter_type < 5; filter_type++) {
+    4,545 ( 0.00%)              stbiw__encode_png_line((unsigned char*)(pixels), stride_bytes, x, y, j, n, filter_type, line_buffer);
+  538,958 ( 0.21%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__encode_png_line (505x)
+        .           
+        .                       // Estimate the entropy of the line using this filter; the less, the better.
+        1 ( 0.00%)              est = 0;
+   48,985 ( 0.02%)              for (i = 0; i < x*n; ++i) {
+  218,665 ( 0.09%)                 est += abs((signed char) line_buffer[i]);
+        .                       }
+      505 ( 0.00%)              if (est < best_filter_val) {
+        .                          best_filter_val = est;
+    1,010 ( 0.00%)                 best_filter = filter_type;
+        .                       }
+        .                    }
+      505 ( 0.00%)           if (filter_type != best_filter) {  // If the last iteration already got us the best filter, don't redo it
+    1,414 ( 0.00%)              stbiw__encode_png_line((unsigned char*)(pixels), stride_bytes, x, y, j, n, best_filter, line_buffer);
+  121,522 ( 0.05%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbiw__encode_png_line (101x)
+        .                       filter_type = best_filter;
+        .                    }
+        .                 }
+        .                 // when we get here, filter_type contains the filter type, and line_buffer contains the data
+      202 ( 0.00%)        filt[j*(x*n+1)] = (unsigned char) filter_type;
+      101 ( 0.00%)        STBIW_MEMMOVE(filt+j*(x*n+1)+1, line_buffer, x*n);
+        .              }
+        2 ( 0.00%)     STBIW_FREE(line_buffer);
+       35 ( 0.00%)  => ???:0x0000000004001180 (1x)
+        7 ( 0.00%)     zlib = stbi_zlib_compress(filt, y*( x*n+1), &zlen, stbi_write_png_compression_level);
+4,352,639 ( 1.73%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbi_zlib_compress (1x)
+        2 ( 0.00%)     STBIW_FREE(filt);
+      131 ( 0.00%)  => ???:0x0000000004001180 (1x)
+        2 ( 0.00%)     if (!zlib) return 0;
+        .           
+        .              // each tag requires 12 bytes of overhead
+        6 ( 0.00%)     out = (unsigned char *) STBIW_MALLOC(8 + 12+13 + 12+zlen + 12);
+      357 ( 0.00%)  => ???:0x0000000004001230 (1x)
+        2 ( 0.00%)     if (!out) return 0;
+        2 ( 0.00%)     *out_len = 8 + 12+13 + 12+zlen + 12;
+        .           
+        .              o=out;
+        .              STBIW_MEMMOVE(o,sig,8); o+= 8;
+        2 ( 0.00%)     stbiw__wp32(o, 13); // header length
+        .              stbiw__wptag(o, "IHDR");
+       31 ( 0.00%)     stbiw__wp32(o, x);
+        6 ( 0.00%)     stbiw__wp32(o, y);
+        1 ( 0.00%)     *o++ = 8;
+        6 ( 0.00%)     *o++ = STBIW_UCHAR(ctype[n]);
+        2 ( 0.00%)     *o++ = 0;
+        .              *o++ = 0;
+        1 ( 0.00%)     *o++ = 0;
+        .              stbiw__wpcrc(&o,13);
+        .           
+        9 ( 0.00%)     stbiw__wp32(o, zlen);
+        2 ( 0.00%)     stbiw__wptag(o, "IDAT");
+        1 ( 0.00%)     STBIW_MEMMOVE(o, zlib, zlen);
+        1 ( 0.00%)     o += zlen;
+        2 ( 0.00%)     STBIW_FREE(zlib);
+      153 ( 0.00%)  => ???:0x0000000004001180 (1x)
+        .              stbiw__wpcrc(&o, zlen);
+        .           
+        2 ( 0.00%)     stbiw__wp32(o,0);
+        .              stbiw__wptag(o, "IEND");
+        .              stbiw__wpcrc(&o,0);
+        .           
+        5 ( 0.00%)     STBIW_ASSERT(o == out + *out_len);
+        .           
+        .              return out;
+       12 ( 0.00%)  }
+        .           
+        .           #ifndef STBI_WRITE_NO_STDIO
+        .           STBIWDEF int stbi_write_png(char const *filename, int x, int y, int comp, const void *data, int stride_bytes)
+       10 ( 0.00%)  {
+        .              FILE *f;
+        .              int len;
+        5 ( 0.00%)     unsigned char *png = stbi_write_png_to_mem((const unsigned char *) data, stride_bytes, x, y, comp, &len);
+5,350,448 ( 2.13%)  => results/20261110T033438Z-batch/source/./stb_image_write.h:stbi_write_png_to_mem (1x)
+        2 ( 0.00%)     if (png == NULL) return 0;
+        .           
+        .              f = stbiw__fopen(filename, "wb");
+        2 ( 0.00%)     if (!f) { STBIW_FREE(png); return 0; }
+        5 ( 0.00%)     fwrite(png, 1, len, f);
+      827 ( 0.00%)  => ???:0x0000000004001290 (1x)
+        2 ( 0.00%)     fclose(f);
+      640 ( 0.00%)  => ???:0x00000000040011a0 (1x)
+        2 ( 0.00%)     STBIW_FREE(png);
+      165 ( 0.00%)  => ???:0x0000000004001180 (1x)
+        1 ( 0.00%)     return 1;
+        7 ( 0.00%)  }
+        .           #endif
+        .           
+        .           STBIWDEF int stbi_write_png_to_func(stbi_write_func *func, void *context, int x, int y, int comp, const void *data, int stride_bytes)
+        .           {
+        .              int len;
+        .              unsigned char *png = stbi_write_png_to_mem((const unsigned char *) data, stride_bytes, x, y, comp, &len);
+        .              if (png == NULL) return 0;
+        .              func(context, png, len);
+-- line 1236 ----------------------------------------
+
+--------------------------------------------------------------------------------
+-- Auto-annotated source: results/20261110T033438Z-batch/source/./sandpile.c
+--------------------------------------------------------------------------------
+Ir                  
+
+-- line 20 ----------------------------------------
+         .           }
+         .           
+         .           int N = 801;
+         .           int **grid;
+         .           
+         .           // you can also use this function to debug print your sandpile
+         .           static void render(char *filename) {
+         .             int chan = 3;
+         8 ( 0.00%)    unsigned char *pixels = (unsigned char *)malloc(N * N * chan * sizeof(char));
+       146 ( 0.00%)  => ???:0x0000000004001230 (1x)
+         2 ( 0.00%)    int stride = N * chan;
+         2 ( 0.00%)    if (!pixels)
+         .               die("malloc failed for PNG pixel buffer");
+       420 ( 0.00%)    for (int i = 0; i < N; ++i) {
+    41,006 ( 0.02%)      for (int j = 0; j < N; ++j) {
+         .                 unsigned char r = 0, g = 0, b = 0;
+    50,746 ( 0.02%)        switch (grid[i][j]) {
+         .                 case 0: // obsidian
+         .                   r = 15;
+         .                   g = 15;
+         .                   b = 25;
+         .                   break;
+         .                 case 1: // electric cyan
+         .                   r = 0;
+         .                   g = 210;
+-- line 43 ----------------------------------------
+-- line 55 ----------------------------------------
+         .                   break;
+         .                 default: // white
+         .                   r = 0;
+         .                   g = 0;
+         .                   b = 0;
+         .                 }
+         .           
+         .                 int pid = (i * N + j) * chan;
+    20,124 ( 0.01%)        pixels[pid] = r;
+    10,201 ( 0.00%)        pixels[pid + 1] = g;
+    10,201 ( 0.00%)        pixels[pid + 2] = b;
+         .               }
+         .             }
+         8 ( 0.00%)    if (stbi_write_png(filename, N, N, chan, pixels, stride)) {
+ 5,352,905 ( 2.13%)  => /home/am88/CS598APE-HW3/results/20261110T033438Z-batch/source/./stb_image_write.h:stbi_write_png (1x)
+         .               printf("Successfully saved sandpile identity to: %s\n", filename);
+         .             } else {
+         .               die("Error: stb_image_write failed to save png file\n");
+         .             }
+         2 ( 0.00%)    free(pixels);
+       165 ( 0.00%)  => ???:0x0000000004001180 (1x)
+         .           }
+         .           
+         .           struct active_row {
+         .             int first;
+         .             int last;
+         .           };
+         .           
+         .           // The disk intersects each row in one interval; intersecting with the original
+         .           // mouth prefix keeps it contiguous. Widen before squaring to avoid overflow.
+         .           static struct active_row *precompute_active_rows(void) {
+         6 ( 0.00%)    struct active_row *rows = malloc((size_t)N * sizeof(*rows));
+       194 ( 0.00%)  => ???:0x0000000004001230 (2x)
+         8 ( 0.00%)    if (!rows)
+         .               die("malloc failed for active row intervals");
+        12 ( 0.00%)    int64_t center = N / 2;
+        14 ( 0.00%)    int64_t radius_squared = center * center;
+       812 ( 0.00%)    for (int i = 0; i < N; ++i) {
+       202 ( 0.00%)      rows[i].first = 0;
+         .               rows[i].last = -1;
+         .               int64_t di = (int64_t)i - center;
+    47,218 ( 0.02%)      for (int j = 0; j <= MAX(i, N - 1 - i); ++j) {
+         .                 int64_t dj = (int64_t)j - center;
+    90,060 ( 0.04%)        if (di * di + dj * dj <= radius_squared) {
+    23,676 ( 0.01%)          if (rows[i].last < 0)
+       202 ( 0.00%)            rows[i].first = j;
+    11,838 ( 0.00%)          rows[i].last = j;
+         .                 }
+         .               }
+         .             }
+         .             return rows;
+         .           }
+         .           
+         .           // Positive increments are checked before addition; q*4 cannot exceed the
+         .           // current nonnegative int height. Inactive cells retain their sink counters.
+         .           static void add_grains(int *cell, int q) {
+58,295,826 (23.22%)    if (*cell > INT_MAX - q)
+         .               die("integer overflow in grain accumulation");
+33,801,737 (13.47%)    *cell += q;
+         .           }
+         .           
+        10 ( 0.00%)  static void stabilize() {
+         .             struct active_row *rows = precompute_active_rows();
+         .             int changed = 0;
+         .             do {
+     1,633 ( 0.00%)      changed = 0;
+   831,197 ( 0.33%)      for (int i = 0; i < N; ++i) {
+39,322,640 (15.66%)        for (int j = rows[i].first; j <= rows[i].last; ++j) {
+29,496,881 (11.75%)          if (grid[i][j] < 4)
+         .                     continue;
+ 4,163,998 ( 1.66%)          changed = 1; // topple it
+         .                   // q successive topplings are legal: before the last, height >= 4.
+ 8,327,996 ( 3.32%)          int q = grid[i][j] / 4;
+ 8,328,025 ( 3.32%)          grid[i][j] -= 4 * q;
+         .                   if (i > 0)
+12,491,907 ( 4.98%)            add_grains(&grid[i - 1][j], q);
+12,491,965 ( 4.98%)          if (j > 0)
+         .                     add_grains(&grid[i][j - 1], q);
+16,655,934 ( 6.64%)          if (i < N - 1)
+ 4,163,999 ( 1.66%)            add_grains(&grid[i + 1][j], q);
+16,655,936 ( 6.64%)          if (j < N - 1)
+         .                     add_grains(&grid[i][j + 1], q);
+         .                 }
+         .               }
+     3,266 ( 0.00%)    } while (changed);
+         4 ( 0.00%)    free(rows);
+       377 ( 0.00%)  => ???:0x0000000004001180 (2x)
+        10 ( 0.00%)  }
+         .           
+         2 ( 0.00%)  void find_identity() {
+       306 ( 0.00%)    for (int i = 0; i < N; ++i) {
+    40,804 ( 0.02%)      for (int j = 0; j < N; ++j) {
+    10,507 ( 0.00%)        grid[i][j] = 6;
+         .               }
+         .             }
+         1 ( 0.00%)    stabilize();
+163,120,169 (64.98%)  => results/20261110T033438Z-batch/source/./sandpile.c:stabilize (1x)
+       306 ( 0.00%)    for (int i = 0; i < N; ++i) {
+    40,804 ( 0.02%)      for (int j = 0; j < N; ++j) {
+    31,111 ( 0.01%)        grid[i][j] = 6 - grid[i][j];
+         .               }
+         .             }
+         1 ( 0.00%)    stabilize();
+82,087,414 (32.70%)  => results/20261110T033438Z-batch/source/./sandpile.c:stabilize (1x)
+         1 ( 0.00%)  }
+         .           
+        12 ( 0.00%)  int main(int argc, char **argv) {
+         2 ( 0.00%)    if (argc < 2 || argc > 2) {
+         .               fprintf(stderr, "Usage: %s N\n", argv[0]);
+         .               return EXIT_FAILURE;
+         .             }
+         .             char *end;
+         5 ( 0.00%)    uintmax_t parsed = strtoumax(argv[1], &end, 10);
+       151 ( 0.00%)  => ???:0x0000000004001220 (1x)
+        15 ( 0.00%)    if (errno || argv[1][0] < '0' || argv[1][0] > '9' || *end || !parsed ||
+         6 ( 0.00%)  => ???:0x0000000004001190 (1x)
+         .                 parsed > INT32_MAX)
+         .               die("grid size must be a positive int");
+         1 ( 0.00%)    N = (int)parsed;
+         .           
+         4 ( 0.00%)    grid = (int **)malloc(N * sizeof(int *));
+       368 ( 0.00%)  => ???:0x0000000004001230 (1x)
+       305 ( 0.00%)    for (int i = 0; i < N; ++i) {
+       305 ( 0.00%)      grid[i] = (int *)malloc(N * sizeof(int));
+    16,968 ( 0.01%)  => ???:0x0000000004001230 (101x)
+         .             }
+         .           
+         1 ( 0.00%)    find_identity();
+245,331,426 (97.73%)  => results/20261110T033438Z-batch/source/./sandpile.c:find_identity (1x)
+         .           
+         .             render("identity.png");
+       307 ( 0.00%)    for (int i = 0; i < N; ++i) {
+       303 ( 0.00%)      free(grid[i]);
+    15,669 ( 0.01%)  => ???:0x0000000004001180 (101x)
+         .             }
+         2 ( 0.00%)    free(grid);
+        35 ( 0.00%)  => ???:0x0000000004001180 (1x)
+         1 ( 0.00%)    return EXIT_SUCCESS;
+        12 ( 0.00%)  }
+
+--------------------------------------------------------------------------------
+Ir                   
+--------------------------------------------------------------------------------
+250,633,801 (99.84%)  events annotated
+

@@ -1,0 +1,11 @@
+==9479== Callgrind, a call-graph generating cache profiler
+==9479== Copyright (C) 2002-2017, and GNU GPL'd, by Josef Weidendorfer et al.
+==9479== Using Valgrind-3.26.0 and LibVEX; rerun with -h for copyright info
+==9479== Command: /home/am88/CS598APE-HW3/results/20261110T075051Z-alternating/source/sandpile.exe 101
+==9479== 
+==9479== For interactive control, run 'callgrind_control -h'.
+==9479== 
+==9479== Events    : Ir
+==9479== Collected : 161028035
+==9479== 
+==9479== I   refs:      161,028,035

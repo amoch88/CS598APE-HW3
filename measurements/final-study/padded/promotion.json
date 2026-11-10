@@ -1,0 +1,29 @@
+{
+  "source_commit": "1080490846c96703f0734771560e729b9224cf73",
+  "command": [
+    "timeout",
+    "--kill-after=5",
+    "480",
+    "taskset",
+    "-c",
+    "0",
+    "/usr/bin/python3",
+    "/home/am88/CS598APE-HW3/scripts/check.py",
+    "--source",
+    "/home/am88/CS598APE-HW3/results/20261110T075341Z-padded/source/sandpile.c",
+    "--binary",
+    "/home/am88/CS598APE-HW3/results/20261110T075341Z-padded/source/sandpile.exe",
+    "--output",
+    "/home/am88/CS598APE-HW3/results/20261110T075341Z-padded/target-correctness",
+    "--reference-png",
+    "/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline/source/identity-ref.png",
+    "--golden",
+    "/home/am88/CS598APE-HW3/results/20261110T023926Z-row-intervals/expected",
+    "--sizes",
+    "1001",
+    "--target-png",
+    "/home/am88/CS598APE-HW3/results/20261110T075341Z-padded/timing/n1001-run1/identity.png"
+  ],
+  "status": "PASS",
+  "deadline": "2026-11-10T04:10:00"
+}

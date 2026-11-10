@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/home/am88/CS598APE-HW3/scripts/final_experiment.py", line 145, in main
+    for k in range(1,4): measure(n,k,90)
+                         ~~~~~~~^^^^^^^^
+  File "/home/am88/CS598APE-HW3/scripts/final_experiment.py", line 137, in measure
+    compare(expected/f'n{n}'/'identity.png',pathlib.Path(record['directory'])/'identity.png')
+            ~~~~~~~~^~~~~~~~
+TypeError: unsupported operand type(s) for /: 'list' and 'str'

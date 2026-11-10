@@ -1,0 +1,37 @@
+{
+  "selected": {
+    "path": "/home/am88/CS598APE-HW3/results/20261110T081751Z-combined",
+    "name": "combined",
+    "source_commit": "245fad1455fe7dd9033b64732e259534c40cd5a0",
+    "values_seconds": [
+      236.66,
+      235.37,
+      235.71
+    ],
+    "median_seconds": 235.71
+  },
+  "comparisons": [
+    {
+      "path": "/home/am88/CS598APE-HW3/results/20261110T081751Z-combined",
+      "name": "combined",
+      "source_commit": "245fad1455fe7dd9033b64732e259534c40cd5a0",
+      "values_seconds": [
+        236.66,
+        235.37,
+        235.71
+      ],
+      "median_seconds": 235.71
+    },
+    {
+      "path": "/home/am88/CS598APE-HW3/results/20261110T075341Z-padded",
+      "name": "padded",
+      "source_commit": "1080490846c96703f0734771560e729b9224cf73",
+      "values_seconds": [
+        259.78,
+        259.47,
+        259.41
+      ],
+      "median_seconds": 259.47
+    }
+  ]
+}

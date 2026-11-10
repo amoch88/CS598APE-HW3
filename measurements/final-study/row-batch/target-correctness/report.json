@@ -1,0 +1,310 @@
+{
+  "source_sha256": "ada4f5e8e536ce018561776071596d5db82238cc3ed08633ffe2d41df9742d18",
+  "adapter_build_command": [
+    "gcc",
+    "-O3",
+    "-g",
+    "-DSANDPILE_SOURCE=\"/home/am88/CS598APE-HW3/results/20261110T033438Z-batch/source/sandpile.c\"",
+    "/home/am88/CS598APE-HW3/tests/grid_driver.c",
+    "-o",
+    "/home/am88/CS598APE-HW3/results/20261110T033438Z-batch/target-correctness/grid-driver.exe",
+    "-lm"
+  ],
+  "seed": 598,
+  "checks": [
+    {
+      "kind": "identity",
+      "size": 1001,
+      "all_allocated_cells_compared_to_oracle": false,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 1001,
+        "computation_seconds": 379.917677084,
+        "grid_dump_seconds": 0.084776302,
+        "render_seconds": 0.077647511
+      },
+      "reference_comparison": {
+        "width": 1001,
+        "height": 1001,
+        "decoded_rgb_sha256": "b441526432630e9546cd63f21b25c7b58be8a1c05efd9a5b8377656ac2cab183",
+        "mismatched_channels": 0
+      }
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 0,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 1,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 2,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 3,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 4,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 5,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 6,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 7,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 8,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 9,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 10,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 11,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 12,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 13,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 14,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 15,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 16,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 17,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 18,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 19,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 20,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 21,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 22,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 23,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "0"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "-1"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "abc"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "12x"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "2147483648"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "2",
+        "extra"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS"
+}

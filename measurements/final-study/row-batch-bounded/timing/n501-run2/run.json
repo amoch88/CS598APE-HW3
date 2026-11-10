@@ -1,0 +1,13 @@
+{
+  "start_utc": "2026-11-10T03:53:05.720419+00:00",
+  "size": 501,
+  "cpu": 0,
+  "wall_seconds": 17.32,
+  "user_seconds": 17.32,
+  "system_seconds": 0.0,
+  "max_rss_kib": 4948,
+  "exit_status": 0,
+  "launcher_wall_seconds": 17.369300574,
+  "png_sha256": "b2c7380e062892ed4596b2f3a0c29401b2a1beb8130f51783b263010d9bb6b99",
+  "directory": "/home/am88/CS598APE-HW3/results/20261110T035148Z-batch-bounded/timing/n501-run2"
+}

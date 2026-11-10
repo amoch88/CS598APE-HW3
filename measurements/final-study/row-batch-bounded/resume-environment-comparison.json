@@ -1,0 +1,9 @@
+{
+  "hostname": true,
+  "kernel": true,
+  "gcc": true,
+  "cpu_model": true,
+  "source_matches_commit": true,
+  "binary_unchanged": true,
+  "target_integer_pass": true
+}

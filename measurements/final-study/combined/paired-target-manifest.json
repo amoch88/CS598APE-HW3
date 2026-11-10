@@ -1,0 +1,26 @@
+{
+  "seed": 598,
+  "initial_observations_preserved": true,
+  "initial_target_count": 1,
+  "requested_target_count": 3,
+  "deadline": "2026-11-10T04:15:00",
+  "order": [
+    {
+      "run": 2,
+      "variant": "padded"
+    },
+    {
+      "run": 2,
+      "variant": "combined"
+    },
+    {
+      "run": 3,
+      "variant": "combined"
+    },
+    {
+      "run": 3,
+      "variant": "padded"
+    }
+  ],
+  "note": "Runs 2 and 3 are paired blocks; original run 1 observations remain historical/unpaired"
+}

@@ -1,0 +1,42 @@
+{
+  "values_seconds": [
+    269.95,
+    269.98,
+    268.3
+  ],
+  "median_seconds": 269.95,
+  "min_seconds": 268.3,
+  "max_seconds": 269.98,
+  "mean_seconds": 269.41,
+  "sample_sd_seconds": 0.9614052215377196,
+  "speedup_original": 2.396480829783293,
+  "speedup_row": 1.1291720689016485,
+  "checks": {
+    "small-correctness/report.json": "PASS",
+    "target-correctness/report.json": "PASS",
+    "overflow-checks/report.json": "PASS",
+    "final-validation.json": "PASS"
+  },
+  "reference_comparisons": [
+    {
+      "width": 1001,
+      "height": 1001,
+      "decoded_rgb_sha256": "b441526432630e9546cd63f21b25c7b58be8a1c05efd9a5b8377656ac2cab183",
+      "mismatched_channels": 0
+    },
+    {
+      "width": 1001,
+      "height": 1001,
+      "decoded_rgb_sha256": "b441526432630e9546cd63f21b25c7b58be8a1c05efd9a5b8377656ac2cab183",
+      "mismatched_channels": 0
+    },
+    {
+      "width": 1001,
+      "height": 1001,
+      "decoded_rgb_sha256": "b441526432630e9546cd63f21b25c7b58be8a1c05efd9a5b8377656ac2cab183",
+      "mismatched_channels": 0
+    }
+  ],
+  "source_commit": "50970858a53845220b44f604e62223c2ea7f1ea1",
+  "resumed_after_deadline_extension": true
+}

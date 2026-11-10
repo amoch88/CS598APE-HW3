@@ -1,0 +1,65 @@
+[
+  {
+    "size": 101,
+    "candidate": [
+      0.03,
+      0.03,
+      0.03
+    ],
+    "parent": [
+      0.03,
+      0.03,
+      0.03
+    ],
+    "median_speedup": 1.0,
+    "paired_block_ratios": [
+      1.0,
+      1.0,
+      1.0
+    ],
+    "candidate_sample_sd": 0.0,
+    "parent_sample_sd": 0.0
+  },
+  {
+    "size": 251,
+    "candidate": [
+      1.02,
+      1.01,
+      1.02
+    ],
+    "parent": [
+      1.11,
+      1.11,
+      1.12
+    ],
+    "median_speedup": 1.0882352941176472,
+    "paired_block_ratios": [
+      1.0882352941176472,
+      1.099009900990099,
+      1.0980392156862746
+    ],
+    "candidate_sample_sd": 0.005773502691896263,
+    "parent_sample_sd": 0.005773502691896263
+  },
+  {
+    "size": 501,
+    "candidate": [
+      15.13,
+      15.15,
+      15.12
+    ],
+    "parent": [
+      16.75,
+      16.7,
+      16.75
+    ],
+    "median_speedup": 1.107072042300066,
+    "paired_block_ratios": [
+      1.107072042300066,
+      1.1023102310231023,
+      1.1078042328042328
+    ],
+    "candidate_sample_sd": 0.015275252316519916,
+    "parent_sample_sd": 0.0288675134594817
+  }
+]

@@ -1,185 +1,149 @@
-# CS598APE HW3
+# CS598APE HW3: Abelian Sandpile identity
 
-This repository contains code for homework 3 of CS598APE. It is relatively
-simple in comparison to HW1 and HW2 to ensure you have enough time to work on
-the course project. 
+Compute the identity sandpile on a Pac-Man-shaped grid. The square is filled with
+six grains, active cells stabilize, every stored height is complemented as
+`6-height`, and the graph stabilizes again. A toppling loses four grains and
+sends one to each orthogonal neighbor. Excluded in-square cells retain grains but
+never topple. The program writes `identity.png` in its current directory.
 
-`sandpile.c` contains the implementation of finding the identity element of a 2D
-abelian sandpile.
+![N=1001 identity reference](identity-ref.png)
 
-![Identity sandpile on a 1001x1001 pacman grid](identity-ref.png)
+## Final implementation and results
 
-*Identity sandpile on a 1001x1001 pacman grid*
+Branch **`hw3-final`** uses exact active-row intervals, legal batched topplings, a once-per-stage arithmetic bound, and padded physical boundaries, with alternating forward/reverse sweeps.
+The measured C source is commit **`245fad1455fe7dd9033b64732e259534c40cd5a0`**; later artifact commits add evidence,
+tools and documentation without changing that source. Original and experimental
+branches remain available; the repository remains private.
 
+N=1001 observations: **236.66, 235.37, 235.71 seconds**.
+Median **235.71 s**, mean 235.91 s,
+range 235.37-236.66 s, sample SD 0.67 s.
+Speedup: **2.745x** over the 646.93 s original median and
+**1.293x** over the 304.82 s row-interval median.
 
-To compile the program, run:
+| Cumulative configuration | N=101 | N=251 | N=501 | N=1001 |
+|---|---:|---:|---:|---:|
+| Original | 0.09 | 2.73 | 41.18 | 646.93 |
+| Row intervals | 0.04 | 1.30 | 19.69 | 304.82 |
+| Bounded batching | 0.04 | 1.16 | 17.32 | 269.95 |
+| Padded boundaries | 0.03 | 1.11 | 16.74 | 259.47 |
+| Final combined | 0.03 | 1.02 | 15.13 | 235.71 |
+
+All entries above are three-run end-to-end medians in seconds. Complete individual
+and negative results are in [report notes](docs/FINAL_REPORT_NOTES.md). Checked
+batching slowed down; FIFO scheduling was much slower; contiguous storage and an
+explicit remainder mask showed no useful larger-size improvement. GCC generated
+identical machine-code text for the remainder rewrite.
+
+## Build and run
+
+Requires GCC, Make and libm on Unix; Linux on the course VM is tested. The bundled
+PNG writer needs no external image library. The Makefile uses
+**`gcc -O3 -lm -g -Werror`**.
 
 ```bash
-make all
+git clone git@github.com:amoch88/CS598APE-HW3.git
+cd CS598APE-HW3
+git switch hw3-final
+make clean all
+mkdir -p results
+RUN=$(mktemp -d "$PWD/results/manual-XXXXXX")
+(cd "$RUN" && taskset -c 0 "$OLDPWD/sandpile.exe" 1001)
 ```
 
-To clean existing build artifacts, run:
+A fresh working directory preserves earlier images. For routine use,
+`./sandpile.exe 1001` writes in the current directory. The reference image is
+`identity-ref.png`. Exact integer comparison is stronger than image comparison
+because multiple integer values can render as black.
+
+## Correctness and data audit
+
+The selected implementation passed 63 distinct established checks across 16
+identity sizes, including every allocated signed integer at N=1001, negative sink
+counters, active stability, decoded reference pixels, odd/even dimensions,
+independent small-grid oracles, 24 seeded random cases, mathematical identity
+properties and invalid CLI cases. Both intermediate stages were checked at
+N=2/31/32/251. Seven ASan/UBSan sizes, N=101 Memcheck, four arithmetic-bound/fallback
+cases, a byte-identical clean rebuild, post-rebuild checks and 138 mask sizes
+(5,653,280 positions) passed. No full-target intermediate baseline dumps exist;
+full-target verification compares the final grid, not both intermediate stages.
+
+Audit committed data without large VM result directories:
 
 ```bash
-make clean
-```
-
-Usage (after compiling):
-
-```bash
-./sandpile.exe <N> 
-```
-
-where `N` is the grid size
-
-Consider speeding up the generation of this 1001x1001 identity sandpile (which
-takes approximately ~3m 40s on my local laptop under the default setup)
-
-```bash
-./sandpile.exe 1001
-```
-
-For an optional, ungraded challenge, see how large a sandpile you can compute
-on the course VMs and report the grid size and runtime. There is no prescribed
-upper limit on `N` for this challenge.
-
-
-## Baseline experiment artifact
-
-The authoritative study runs on `fa26-cs598a-022.cs.illinois.edu` in
-`~/CS598APE-HW3`. Windows is only the SSH client. The frozen production baseline
-is commit `15fe837445b8e32a15ac61fcfa388980b54d9173`; the production algorithm and
-Makefile are unchanged by this experiment infrastructure.
-
-Requirements: Linux, GCC, Make, Git, Python 3 (standard library only), GNU time
-at `/usr/bin/time`, util-linux `taskset`, GNU binutils (`gprof`), and Valgrind
-with `callgrind_annotate`. `perf` is probed; blocked access is recorded rather
-than changing the machine's security settings. CPU 0 must be available. Record
-actual package/tool versions from `environment.txt`; exact historical timings
-are not promised on another host or toolchain.
-
-Run the complete study from the repository root, with a new output directory:
-
-```bash
-python3 scripts/reproduce.py --output "results/reproduction-$(date -u +%Y%m%dT%H%M%SZ)"
-```
-
-This may take substantial time: it executes three full-size baseline runs and
-one additional full-size integer-grid correctness run. Keep other compute workloads
-idle. The launcher refuses an existing output directory, archives the exact
-baseline Git commit, builds it using its original Makefile and flags
-`-O3 -lm -g -Werror`, records source/binary hashes and environment information,
-and executes workloads sequentially. It never changes the working production
-source or overwrites root-level `identity.png` / `sandpile.exe`.
-
-Timing uses GNU time, one process at a time pinned to logical CPU 0, including
-allocation, both stabilizations, rendering, buffered PNG output, and cleanup.
-An excluded N=101 preflight precedes three N=1001 observations; there is no
-excluded full-size warmup. `timing/timings.csv` contains all raw observations;
-`summary.json` reports median, min/max, mean, sample standard deviation, and
-inclusive quartiles. Validation and profiling are outside these timed runs.
-`launcher_wall_seconds` is auxiliary Python timing, not the reported metric.
-Each run retains `/proc/stat` snapshots, exit status, stdout/stderr and PNG hash.
-
-### Correctness and future candidates
-
-`tests/grid_driver.c` includes the specified source without editing it, renames
-its CLI main, and calls its existing `find_identity()` / `stabilize()` functions.
-It dumps all allocated integer values and renders the same grid. This adapter
-currently assumes the starter's `N`, `int **grid`, and function interface;
-update the adapter explicitly if a future layout change replaces that interface.
-
-`check.py` validates active-cell stability, exact palette rendering, and decoded
-PNG equality between the adapter and release executable. For N<=32 it compares
-every allocated integer cell against an independent reverse-order Python
-stabilizer. It also runs 24 seeded random stabilization/idempotence cases,
-identity/recurrent action checks on N=1..8, and invalid CLI cases. Inactive cells
-receive grains and are compared too; they must never topple. Mathematical group
-checks compare active cells only. The N=1001 decoded image is compared against
-the repository reference; mismatches are saved as failures, never replaced.
-The PNG decoder supports noninterlaced 8-bit RGB (the supplied image format),
-verifies chunk CRCs, and has a synthetic test exercising all five PNG filters.
-
-After a completed baseline study, validate a candidate with fresh output paths:
-
-```bash
-R=/absolute/path/to/completed/baseline-results
-python3 scripts/check.py \
-  --source /absolute/path/to/candidate/sandpile.c \
-  --binary /absolute/path/to/candidate/sandpile.exe \
-  --output results/candidate-check-001 \
-  --reference-png "$R/source/identity-ref.png" \
-  --golden "$R/golden"
-```
-
-This compares every final integer cell and decoded pixel against frozen golden
-outputs for N=1,2,3,4,5,6,7,8,15,16,31,32,101,251,1001. Do not use a modified
-production source as the baseline oracle. Retain the original source commit,
-compiler flags, and golden manifests across future experiments.
-
-### Profiling and interpretation
-
-`run_study.py` waits for timing completion, then prioritizes exploratory profiles:
-`-pg` gprof at N=251, phase counters/times at N=251, and Callgrind instruction
-attribution at N=101. These are explicitly smaller workloads, not target-size
-profiles. The full correctness suite follows, including an N=1001 integer-grid
-run whose adapter records time around the unchanged computation and rendering
-calls. This reuses a required correctness run instead of adding an expensive
-full-size profiling run. ASan/UBSan runs at N=1,2,3,4,31,32,101, and Valgrind
-leak/memory checks run at N=101. Every diagnostic image must match the baseline;
-the N=251 diagnostic final integer grid must match the uninstrumented adapter.
-
-`diagnostic_source.py` generates a disposable instrumented source under results,
-with a saved diff. It counts sweeps, unit topplings, and the distribution of
-`height/4` at unstable visits; scan and active visits are derived from exact
-per-sweep geometry counts. Both phase grids are saved. Its extra counter updates
-perturb performance: diagnostic times are not release benchmark times. Gprof
-also uses a separate instrumented binary. Neither the N=251 profiles nor the
-N=101 instruction counts establish N=1001 line-level runtime fractions or
-hardware cache behavior. The target adapter's outer timing is separate from the
-three release measurements.
-
-Run the decoder test independently with:
-
-```bash
+python3 scripts/check_evidence.py measurements/final-study
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 ```
 
-Large images, binaries, generated source, and raw profiler files stay under
-ignored `results/`. Small raw timing CSVs, environment manifests, and evidence
-extracts belong in `measurements/`, with interpretation in `docs/`. All final
-performance claims must use VM measurements. For later optimizations, record one
-source commit per isolated change, use paired seeded baseline/candidate run
-orders, retain all observations, report dispersion, and show independent and
-cumulative effects. No performance optimization is implemented in this phase.
+The audit checks file hashes, raw observations against derived statistics and
+speedups, PNG hashes, source commits, completed correctness reports and selected
+C source. Use a full clone with the experimental branch objects available.
 
-The initial study was reduced from five to three total release runs at the user's
-request while run 2 was active. `resume_baseline.py` replaced only the controller;
-the second GNU time and sandpile processes continued uninterrupted. That run's
-GNU time values are original; its auxiliary Python launcher time is unavailable
-and left blank, and its start timestamp is reconstructed from the pre-run snapshot
-mtime. The original five-run manifest and transition details remain in results.
-Future reproductions start directly with three runs; use `--runs 5` if desired.
+## Reproduce correctness and optimized timing
 
-### Completed initial study
+On the study VM, reuse the frozen original goldens:
 
-The VM study completed with three N=1001 release observations: 646.93, 645.67,
-and 655.74 seconds (median 646.93 s; sample SD 5.49 s). All 62 correctness checks,
-the decoder test, seven ASan/UBSan runs, and N=101 Valgrind Memcheck passed.
-The target decoded reference comparison had zero mismatched channels.
-See [baseline findings](docs/BASELINE_FINDINGS.md) for measured profiling evidence,
-ranked next experiments, limitations and the full correctness scope, and
-[committed raw evidence](measurements/20261110T013855Z-baseline) for timings,
-environment details and compact profile extracts. Large generated artifacts remain
-in the ignored VM results directory. No production optimization is implemented.
+```bash
+R="$PWD/results/final-reproduction-$(date -u +%Y%m%dT%H%M%SZ)"
+python3 scripts/final_experiment.py \
+  --commit 245fad1455fe7dd9033b64732e259534c40cd5a0 --name combined --output "$R" \
+  --target-runs 3 \
+  --baseline "$PWD/results/latest-baseline" \
+  --row-results "$PWD/results/latest-row-intervals"
+python3 scripts/finalize_candidate.py "$R"
+```
 
-### First isolated optimization: active row intervals
+The launcher archives the exact source, builds cleanly, checks smaller integer
+states and both phases, runs arithmetic and memory checks, measures three runs
+at N=101/251/501, times N=1001, compares every target integer, and completes three
+target release observations. The final step proves the clean rebuild is the
+same binary as the fully validated executable and reruns smaller/mask checks.
+Every result path must be new. Timings include allocation, preprocessing, both
+stabilizations, PNG rendering/writing and cleanup; profiling/adapter times are
+kept separate.
 
-Branch `hw3-row-intervals` implements exact precomputed active row intervals while
-preserving toppling order and all sink state. N=1001 end-to-end median fell from
-646.93 s to 304.82 s (**2.12x speedup**; optimized sample SD 1.46 s, three runs).
-All 63 correctness entries passed, including full integer/pixel comparisons;
-mask equivalence passed for 138 sizes. See the
-[row-interval experiment](docs/ROW_INTERVALS.md) for exact reproduction commands,
-all measurement scopes/limitations, correctness proof and work-reduction evidence.
-The original baseline remains available at its original commits and results paths.
+For a fresh clone, first generate original goldens:
+
+```bash
+B="$PWD/results/baseline-$(date -u +%Y%m%dT%H%M%SZ)"
+python3 scripts/reproduce.py --output "$B"
+```
+
+Then use `--baseline "$B"` and a nonexistent `--row-results` path with the candidate
+launcher. It generates only the additional N=501 original golden. The baseline
+launcher archives original commit `15fe837445b8e32a15ac61fcfa388980b54d9173` and
+runs the expensive original study. The existing evidence was reused, rather than
+repeating that study for every candidate. The complete expensive fresh-clone
+workflow was not repeated solely to test its launcher; component paths and the
+actual clean-clone smoke scope are recorded.
+
+Experiment dependencies: Python 3 standard library, GNU time, util-linux taskset,
+Git, tar and Valgrind. Binutils are used for optional profiles. Plotting uses an
+isolated ignored environment via `python3 scripts/setup_plotting.py`; pinned
+packages are committed and are not production build dependencies.
+
+## Methods, source mapping and report material
+
+- [Report-ready results and all timing observations](docs/FINAL_REPORT_NOTES.md)
+- [Application, profiling and correctness arguments](docs/FINAL_METHODS.md)
+- [Exact reproduction and experimental commit mapping](docs/FINAL_REPRODUCTION.md)
+- [Independent post-recovery experiments](docs/ADDITIONAL_EXPERIMENTS.md)
+- [Original baseline findings](docs/BASELINE_FINDINGS.md)
+- [Row-interval experiment](docs/ROW_INTERVALS.md)
+- [Compact raw evidence and hash manifest](measurements/final-study)
+- [Vector speedup/scaling figures and plot selection](figures/final)
+
+All performance measurements run directly on fa26-cs598a-022.cs.illinois.edu:
+Intel Xeon Silver 4216 @2.10 GHz, four VMware vCPUs, Ubuntu 26.04.1 LTS,
+GCC 15.2.0. Benchmarks run sequentially on logical CPU 0. Historical cohorts are
+not all paired; the second/third padding and final observations use paired
+blocks. Raw runs, ranges and sample SD are retained. Timer resolution is 0.01 s;
+small reported SD=0 does not imply zero noise. Host scheduling/frequency is not
+fully controlled. `perf` access was denied; no cache/IPC claims are made.
+
+Large images, grids, source archives, binaries and raw profiler traces stay under
+ignored `results/`. Git contains code, compact evidence, documentation and PDF/SVG
+figures. No GPU, threading, compiler-flag, renderer, PNG-library or hardcoded-output
+change is used. Tested identity sizes are <=1001; the starter's huge-N renderer
+indexing/allocation limitations are outside this study. Rejected smaller screens
+have no implied target-size correctness or timing results.

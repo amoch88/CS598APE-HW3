@@ -1,0 +1,514 @@
+{
+  "source_sha256": "7d72613cecd9fb14a07adfbad2a5d715b0189e73f27c398c7e11a8b8840e2842",
+  "adapter_build_command": [
+    "gcc",
+    "-O3",
+    "-g",
+    "-DSANDPILE_SOURCE=\"/home/am88/CS598APE-HW3/results/20261110T075634Z-remainder/source/sandpile.c\"",
+    "/home/am88/CS598APE-HW3/tests/grid_driver.c",
+    "-o",
+    "/home/am88/CS598APE-HW3/results/20261110T075634Z-remainder/small-correctness/grid-driver.exe",
+    "-lm"
+  ],
+  "seed": 598,
+  "checks": [
+    {
+      "kind": "identity",
+      "size": 1,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 1,
+        "computation_seconds": 1.049e-06,
+        "grid_dump_seconds": 8.2802e-05,
+        "render_seconds": 0.000133612
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 2,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 2,
+        "computation_seconds": 2.012e-06,
+        "grid_dump_seconds": 0.000104096,
+        "render_seconds": 0.000141553
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 3,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 3,
+        "computation_seconds": 1.804e-06,
+        "grid_dump_seconds": 7.9547e-05,
+        "render_seconds": 0.000136458
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 4,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 4,
+        "computation_seconds": 5.039e-06,
+        "grid_dump_seconds": 7.5638e-05,
+        "render_seconds": 0.000129238
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 5,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 5,
+        "computation_seconds": 3.729e-06,
+        "grid_dump_seconds": 7.2968e-05,
+        "render_seconds": 0.000134451
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 6,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 6,
+        "computation_seconds": 4.526e-06,
+        "grid_dump_seconds": 7.9304e-05,
+        "render_seconds": 0.00013823
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 7,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 7,
+        "computation_seconds": 6.403e-06,
+        "grid_dump_seconds": 7.3507e-05,
+        "render_seconds": 0.000167133
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 8,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 8,
+        "computation_seconds": 7.361e-06,
+        "grid_dump_seconds": 7.8517e-05,
+        "render_seconds": 0.000199037
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 15,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 15,
+        "computation_seconds": 3.5311e-05,
+        "grid_dump_seconds": 0.000107448,
+        "render_seconds": 0.000253525
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 16,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 16,
+        "computation_seconds": 5.3008e-05,
+        "grid_dump_seconds": 0.000107824,
+        "render_seconds": 0.000270786
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 31,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 31,
+        "computation_seconds": 0.000481861,
+        "grid_dump_seconds": 0.0001647,
+        "render_seconds": 0.000353495
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 32,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 32,
+        "computation_seconds": 0.000520003,
+        "grid_dump_seconds": 0.000160998,
+        "render_seconds": 0.000360068
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 101,
+      "all_allocated_cells_compared_to_oracle": false,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 101,
+        "computation_seconds": 0.034978157,
+        "grid_dump_seconds": 0.001122339,
+        "render_seconds": 0.001334176
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 251,
+      "all_allocated_cells_compared_to_oracle": false,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 251,
+        "computation_seconds": 1.149094058,
+        "grid_dump_seconds": 0.004930196,
+        "render_seconds": 0.005849123
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 501,
+      "all_allocated_cells_compared_to_oracle": false,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 501,
+        "computation_seconds": 17.256154978,
+        "grid_dump_seconds": 0.020206026,
+        "render_seconds": 0.020215558
+      }
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 0,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 1,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 2,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 3,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 4,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 5,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 6,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 7,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 8,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 9,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 10,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 11,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 12,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 13,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 14,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 15,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 16,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 17,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 18,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 19,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 20,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 21,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 22,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 23,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "0"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "-1"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "abc"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "12x"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "2147483648"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "2",
+        "extra"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS"
+}

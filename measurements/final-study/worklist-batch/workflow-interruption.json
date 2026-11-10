@@ -1,0 +1,9 @@
+{
+  "original_status": {
+    "central_time": "2026-11-09T21:51:42.563833-06:00",
+    "phase": "workflow",
+    "status": "FAIL"
+  },
+  "reason": "golden path was shadowed by intermediate reference list; no source or oracle failure",
+  "recovery": "adopt preserved run.json only after pixel verification; complete remaining small timings"
+}

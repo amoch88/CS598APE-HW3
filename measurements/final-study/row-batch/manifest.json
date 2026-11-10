@@ -1,0 +1,10 @@
+{
+  "name": "row-batch",
+  "source_commit": "ec81307dbe61699fe7409aec0a9694aae7abce6c",
+  "cpu": 0,
+  "flags": "-O3 -lm -g -Werror",
+  "baseline": "/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline",
+  "row_results": "/home/am88/CS598APE-HW3/results/20261110T023926Z-row-intervals",
+  "target_runs_requested": 1,
+  "deadline": "2026-11-09T22:10:00"
+}
