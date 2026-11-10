@@ -121,7 +121,7 @@ static void stabilize_checked(const struct active_row *rows) {
         changed = 1; // topple it
         // q successive topplings are legal: before the last, height >= 4.
         int q = grid[i][j] / 4;
-        grid[i][j] -= 4 * q;
+        grid[i][j] &= 3; // h >= 4, so this is exactly h - 4*(h/4).
         if (i > 0)
           add_grains(&grid[i - 1][j], q);
         if (j > 0)
@@ -146,7 +146,7 @@ static void stabilize_bounded(const struct active_row *rows) {
         changed = 1; // topple it
         // q successive topplings are legal: before the last, height >= 4.
         int q = grid[i][j] / 4;
-        grid[i][j] -= 4 * q;
+        grid[i][j] &= 3; // h >= 4, so this is exactly h - 4*(h/4).
         if (i > 0)
           grid[i - 1][j] += q;
         if (j > 0)
