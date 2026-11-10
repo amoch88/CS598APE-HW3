@@ -147,3 +147,8 @@ figures. No GPU, threading, compiler-flag, renderer, PNG-library or hardcoded-ou
 change is used. Tested identity sizes are <=1001; the starter's huge-N renderer
 indexing/allocation limitations are outside this study. Rejected smaller screens
 have no implied target-size correctness or timing results.
+
+Fresh GitHub clone smoke verification passed the data audit, clean default build,
+54 correctness entries and decoder tests. Its code/read-only-data/initialized-data
+sections match the measured executable. See [smoke evidence](measurements/final-smoke).
+The authoritative VM checkout is built and ready; existing root output was preserved.

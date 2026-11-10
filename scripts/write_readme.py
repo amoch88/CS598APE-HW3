@@ -154,4 +154,7 @@ change is used. Tested identity sizes are <=1001; the starter's huge-N renderer
 indexing/allocation limitations are outside this study. Rejected smaller screens
 have no implied target-size correctness or timing results.
 '''
+smoke=pathlib.Path(__file__).resolve().parents[1]/'measurements/final-smoke/report.json'
+if smoke.exists():
+ text+='\nFresh GitHub clone smoke verification passed the data audit, clean default build,\n54 correctness entries and decoder tests. Its code/read-only-data/initialized-data\nsections match the measured executable. See [smoke evidence](measurements/final-smoke).\nThe authoritative VM checkout is built and ready; existing root output was preserved.\n'
 a.output.write_text(text);print(a.output)

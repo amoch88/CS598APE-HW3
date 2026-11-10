@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "artifact_commit": "e2140853b7f47a308e05cd0c165935ffd9dc12bd",
+  "selected_source_commit": "245fad1455fe7dd9033b64732e259534c40cd5a0",
+  "source_sha256": "7dad0f3a4122f2d4e3e9693ccb9b2ec0a2ea5c4e07975b872a397d1664144b41",
+  "correctness_entries": 54,
+  "sizes": [
+    1,
+    2,
+    3,
+    4,
+    31,
+    32,
+    101
+  ],
+  "evidence_audit": "PASS",
+  "decoder_test": "PASS",
+  "clean_build": "PASS",
+  "measured_executable_sections_identical": {
+    ".text": true,
+    ".rodata": true,
+    ".data": true
+  },
+  "clone_working_tree": "clean",
+  "commands_log": "/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/commands.log",
+  "note": "No original or target performance run repeated; full target correctness already passed for this exact C source and flags"
+}

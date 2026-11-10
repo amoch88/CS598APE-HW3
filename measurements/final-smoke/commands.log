@@ -1,0 +1,117 @@
+$ git clone --branch hw3-final git@github.com:amoch88/CS598APE-HW3.git /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo
+Cloning into '/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo'...
+$ python3 scripts/check_evidence.py measurements/final-study
+PASS: 604 file hashes, 110 observations, 38 statistical groups, 9 source commits, all PNG hashes, and selected source
+$ make clean all
+rm -f ./*.exe
+gcc ./sandpile.c -o ./sandpile.exe -O3 -lm -g -Werror
+$ python3 -m unittest discover -s tests -p test_*.py -v
+test_all_filters_and_crc (test_png_pixels.PNGTests.test_all_filters_and_crc) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.001s
+
+OK
+$ taskset -c 0 python3 /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/scripts/check.py --source /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/sandpile.c --binary /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/sandpile.exe --output /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/correctness --reference-png /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/identity-ref.png --golden /home/am88/CS598APE-HW3/results/latest-baseline/golden --sizes 1 2 3 4 31 32 101
+{"kind": "identity", "size": 1, "all_allocated_cells_compared_to_oracle": true, "all_allocated_cells_compared_to_golden": true, "active_stability": "PASS", "grid_palette": "PASS", "release_adapter_pixels": "PASS", "adapter_times": {"size": 1, "computation_seconds": 2.589e-06, "grid_dump_seconds": 8.4878e-05, "render_seconds": 0.000130389}}
+{"kind": "identity", "size": 2, "all_allocated_cells_compared_to_oracle": true, "all_allocated_cells_compared_to_golden": true, "active_stability": "PASS", "grid_palette": "PASS", "release_adapter_pixels": "PASS", "adapter_times": {"size": 2, "computation_seconds": 4.833e-06, "grid_dump_seconds": 7.5916e-05, "render_seconds": 0.000133364}}
+{"kind": "identity", "size": 3, "all_allocated_cells_compared_to_oracle": true, "all_allocated_cells_compared_to_golden": true, "active_stability": "PASS", "grid_palette": "PASS", "release_adapter_pixels": "PASS", "adapter_times": {"size": 3, "computation_seconds": 4.899e-06, "grid_dump_seconds": 7.6566e-05, "render_seconds": 0.000145478}}
+{"kind": "identity", "size": 4, "all_allocated_cells_compared_to_oracle": true, "all_allocated_cells_compared_to_golden": true, "active_stability": "PASS", "grid_palette": "PASS", "release_adapter_pixels": "PASS", "adapter_times": {"size": 4, "computation_seconds": 4.503e-06, "grid_dump_seconds": 9.2828e-05, "render_seconds": 0.000129336}}
+{"kind": "identity", "size": 31, "all_allocated_cells_compared_to_oracle": true, "all_allocated_cells_compared_to_golden": true, "active_stability": "PASS", "grid_palette": "PASS", "release_adapter_pixels": "PASS", "adapter_times": {"size": 31, "computation_seconds": 0.00040036, "grid_dump_seconds": 0.000183158, "render_seconds": 0.000355135}}
+{"kind": "identity", "size": 32, "all_allocated_cells_compared_to_oracle": true, "all_allocated_cells_compared_to_golden": true, "active_stability": "PASS", "grid_palette": "PASS", "release_adapter_pixels": "PASS", "adapter_times": {"size": 32, "computation_seconds": 0.000484276, "grid_dump_seconds": 0.000175733, "render_seconds": 0.000365093}}
+{"kind": "identity", "size": 101, "all_allocated_cells_compared_to_oracle": false, "all_allocated_cells_compared_to_golden": true, "active_stability": "PASS", "grid_palette": "PASS", "release_adapter_pixels": "PASS", "adapter_times": {"size": 101, "computation_seconds": 0.030149557, "grid_dump_seconds": 0.00101007, "render_seconds": 0.001269086}}
+PASS: 54 correctness checks
+$ objcopy --dump-section .text=/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/measured.text /home/am88/CS598APE-HW3/results/20261110T081751Z-combined/source/sandpile.exe
+$ objcopy --dump-section .text=/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/clone.text /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/sandpile.exe
+$ objcopy --dump-section .rodata=/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/measured.rodata /home/am88/CS598APE-HW3/results/20261110T081751Z-combined/source/sandpile.exe
+$ objcopy --dump-section .rodata=/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/clone.rodata /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/sandpile.exe
+$ objcopy --dump-section .data=/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/measured.data /home/am88/CS598APE-HW3/results/20261110T081751Z-combined/source/sandpile.exe
+$ objcopy --dump-section .data=/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/clone.data /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/sandpile.exe
+$ python3 /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/scripts/final_experiment.py --help
+usage: final_experiment.py [-h] --commit COMMIT --name NAME --output OUTPUT
+                           [--baseline BASELINE] [--row-results ROW_RESULTS]
+                           [--parent-study PARENT_STUDY]
+                           [--target-runs TARGET_RUNS] [--skip-target]
+                           [--small-max {251,501}] [--deadline DEADLINE]
+
+Bounded, sequential validation and release timing for an archived source
+commit.
+
+options:
+  -h, --help            show this help message and exit
+  --commit COMMIT
+  --name NAME
+  --output OUTPUT
+  --baseline BASELINE
+  --row-results ROW_RESULTS
+  --parent-study PARENT_STUDY
+  --target-runs TARGET_RUNS
+  --skip-target
+  --small-max {251,501}
+  --deadline DEADLINE   ISO Central time; reserve 5 minutes after this
+                        workflow
+$ python3 /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/scripts/repeat_candidate.py --help
+usage: repeat_candidate.py [-h] [--runs RUNS] [--deadline DEADLINE] [--resume]
+                           study
+
+positional arguments:
+  study
+
+options:
+  -h, --help           show this help message and exit
+  --runs RUNS
+  --deadline DEADLINE
+  --resume
+$ python3 /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/scripts/repeat_pair.py --help
+usage: repeat_pair.py [-h] [--runs RUNS] [--seed SEED] [--deadline DEADLINE]
+                      candidate parent
+
+positional arguments:
+  candidate
+  parent
+
+options:
+  -h, --help           show this help message and exit
+  --runs RUNS
+  --seed SEED
+  --deadline DEADLINE
+$ python3 /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/scripts/finalize_candidate.py --help
+usage: finalize_candidate.py [-h] study
+
+positional arguments:
+  study
+
+options:
+  -h, --help  show this help message and exit
+$ python3 /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/scripts/write_report_notes.py --help
+usage: write_report_notes.py [-h] --selection SELECTION --output OUTPUT
+                             [--compact-only]
+                             summary
+
+positional arguments:
+  summary
+
+options:
+  -h, --help            show this help message and exit
+  --selection SELECTION
+  --output OUTPUT
+  --compact-only
+$ python3 /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/scripts/write_readme.py --help
+usage: write_readme.py [-h] --selection SELECTION --output OUTPUT summary
+
+positional arguments:
+  summary
+
+options:
+  -h, --help            show this help message and exit
+  --selection SELECTION
+  --output OUTPUT
+$ python3 /home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/repo/scripts/promote_candidate.py --help
+usage: promote_candidate.py [-h] [--deadline DEADLINE] study
+
+positional arguments:
+  study
+
+options:
+  -h, --help           show this help message and exit
+  --deadline DEADLINE

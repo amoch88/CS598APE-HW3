@@ -38,4 +38,8 @@ for directory in sorted(r.iterdir()):
  source_checks+=1
 selected=json.loads((r/'selection.json').read_text())['selected'];expected=json.loads((r/selected['name']/'build-hashes.json').read_text())['source']
 assert hashlib.sha256((ROOT/'sandpile.c').read_bytes()).hexdigest()==expected,'working C source differs from selected measured source'
+smoke=r.parent/'final-smoke/manifest.json'
+if smoke.exists():
+ for name,expected in json.loads(smoke.read_text())['files'].items():
+  assert hashlib.sha256((smoke.parent/name).read_bytes()).hexdigest()==expected,name
 print(f'PASS: {len(manifest["files"])} file hashes, {len(rows)} observations, {len(lookup)} statistical groups, {source_checks} source commits, all PNG hashes, and selected source')
