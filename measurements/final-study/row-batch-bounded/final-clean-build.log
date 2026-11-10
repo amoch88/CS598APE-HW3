@@ -1,0 +1,2 @@
+rm -f ./*.exe
+gcc ./sandpile.c -o ./sandpile.exe -O3 -lm -g -Werror

@@ -25,3 +25,6 @@
 /sandpile.exe
 __pycache__/
 *.pyc
+
+# Keep compact reproducibility logs referenced by evidence manifests.
+!/measurements/**/*.log
