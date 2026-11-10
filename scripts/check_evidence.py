@@ -25,6 +25,16 @@ for directory in sorted(r.iterdir()):
  meta=json.loads((directory/'manifest.json').read_text());sha=meta['source_commit']
  actual=hashlib.sha256(subprocess.check_output(['git','show',sha+':sandpile.c'],cwd=ROOT)).hexdigest()
  assert actual==json.loads((directory/'build-hashes.json').read_text())['source'],directory
+ assert json.loads((directory/'small-correctness/report.json').read_text())['status']=='PASS'
+ assert all(x['status']=='PASS' for x in json.loads((directory/'memory-safety.json').read_text()))
+ assert all(x['status']=='PASS' for x in json.loads((directory/'stages.json').read_text()))
+ if any(x['variant']==directory.name and int(x['size'])==1001 for x in rows):
+  assert json.loads((directory/'target-correctness/report.json').read_text())['status']=='PASS'
+ parent_csv=directory/'parent-measurements.csv'
+ if parent_csv.exists():
+  for x in csv.DictReader(parent_csv.open()):
+   assert x['source_commit']==summary['variants'][x['variant']]['source_commit']
+   assert x['png_sha256']==next(y['png_sha256'] for y in rows if int(y['size'])==int(x['size']))
  source_checks+=1
 selected=json.loads((r/'selection.json').read_text())['selected'];expected=json.loads((r/selected['name']/'build-hashes.json').read_text())['source']
 assert hashlib.sha256((ROOT/'sandpile.c').read_bytes()).hexdigest()==expected,'working C source differs from selected measured source'

@@ -4,11 +4,11 @@ import argparse,json,pathlib,re,statistics
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 REPO='https://github.com/amoch88/CS598APE-HW3'
 LABELS={'original':'Original','row-intervals':'Row intervals','row-batch':'Rows + checked batch','row-batch-bounded':'Rows + bounded batch','worklist-unit':'FIFO unit','worklist-batch':'FIFO batch','contiguous':'Contiguous storage','alternating':'Alternating sweeps','padded':'Padded boundaries','remainder':'Remainder mask','combined':'Final combined'}
-p=argparse.ArgumentParser();p.add_argument('summary',type=pathlib.Path);p.add_argument('--selection',type=pathlib.Path,required=True);p.add_argument('--output',type=pathlib.Path,required=True);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('summary',type=pathlib.Path);p.add_argument('--selection',type=pathlib.Path,required=True);p.add_argument('--output',type=pathlib.Path,required=True);p.add_argument('--compact-only',action='store_true');a=p.parse_args()
 d=json.loads(a.summary.read_text());data=d['measurements'];variants=d['variants'];sel=json.loads(a.selection.read_text())['selected'];name=sel['name'];source=sel['source_commit'];r=pathlib.Path(sel['path'])
 def study_path(variant):
     original=pathlib.Path(variants[variant]['results'])
-    return original if original.is_dir() else a.summary.resolve().parent/variant
+    return original if original.is_dir() and not a.compact_only else a.summary.resolve().parent/variant
 r=study_path(name)
 lookup={(x['variant'],x['size']):x for x in data};final=lookup[name,1001]
 assert json.loads((r/'final-validation.json').read_text())['status']=='PASS'
