@@ -21,6 +21,39 @@ static void die(const char *s) {
 
 int N = 801;
 int **grid;
+#define SANDPILE_GRID_ALLOCATORS 1
+static int **grid_rows;
+
+// Each separately allocated row has one sink cell on either side; two extra
+// rows provide top/bottom sinks. The public grid still indexes physical cells.
+static void allocate_grid(void) {
+  size_t n = (size_t)N;
+  if (n > SIZE_MAX / sizeof(*grid) - 2 ||
+      n > SIZE_MAX / sizeof(**grid) - 2)
+    die("padded grid allocation size overflow");
+  grid_rows = malloc((n+2) * sizeof(*grid_rows));
+  if (!grid_rows) die("padded row allocation failed");
+  for (size_t r=0;r<n+2;++r) {
+    int *row = malloc((n+2) * sizeof(*row));
+    if (!row) {
+      for (size_t k=0;k<r;++k) free(grid_rows[k]-1);
+      free(grid_rows); die("padded cell allocation failed");
+    }
+    grid_rows[r] = row+1;
+  }
+  grid = grid_rows+1;
+}
+
+static void release_grid(void) {
+  for (size_t r=0;r<(size_t)N+2;++r) free(grid_rows[r]-1);
+  free(grid_rows);
+}
+
+static void clear_boundary_sinks(void) {
+  for (int64_t j=-1;j<=(int64_t)N;++j)
+    grid[-1][j] = grid[N][j] = 0;
+  for (int i=0;i<N;++i) grid[i][-1] = grid[i][N] = 0;
+}
 
 // you can also use this function to debug print your sandpile
 static void render(char *filename) {
@@ -147,14 +180,10 @@ static void stabilize_bounded(const struct active_row *rows) {
         // q successive topplings are legal: before the last, height >= 4.
         int q = grid[i][j] / 4;
         grid[i][j] -= 4 * q;
-        if (i > 0)
-          grid[i - 1][j] += q;
-        if (j > 0)
-          grid[i][j - 1] += q;
-        if (i < N - 1)
-          grid[i + 1][j] += q;
-        if (j < N - 1)
-          grid[i][j + 1] += q;
+        grid[i - 1][j] += q;
+        grid[i][j - 1] += q;
+        grid[i + 1][j] += q;
+        grid[i][j + 1] += q;
       }
     }
   } while (changed);
@@ -166,6 +195,9 @@ static void stabilize_bounded(const struct active_row *rows) {
 // int, every subsequent cell value fits int. Negative cells only increase.
 // Keep checked updates for arbitrary test inputs outside this sufficient bound.
 static void stabilize() {
+  // Outside cells never feed back or render. Resetting them makes the same
+  // positive-grain bound cover both physical cells and the initially zero halo.
+  clear_boundary_sinks();
   struct active_row *rows = precompute_active_rows();
   int64_t positive = 0;
   for (int i=0;i<N && positive<=INT_MAX;++i)
@@ -205,17 +237,11 @@ int main(int argc, char **argv) {
     die("grid size must be a positive int");
   N = (int)parsed;
 
-  grid = (int **)malloc(N * sizeof(int *));
-  for (int i = 0; i < N; ++i) {
-    grid[i] = (int *)malloc(N * sizeof(int));
-  }
+  allocate_grid();
 
   find_identity();
 
   render("identity.png");
-  for (int i = 0; i < N; ++i) {
-    free(grid[i]);
-  }
-  free(grid);
+  release_grid();
   return EXIT_SUCCESS;
 }
