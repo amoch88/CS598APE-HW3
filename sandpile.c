@@ -21,6 +21,24 @@ static void die(const char *s) {
 
 int N = 801;
 int **grid;
+#define SANDPILE_GRID_ALLOCATORS 1
+static int *grid_storage;
+
+static void allocate_grid(void) {
+  size_t n = (size_t)N;
+  if (n > SIZE_MAX / sizeof(*grid) || n > SIZE_MAX / n / sizeof(**grid))
+    die("grid allocation size overflow");
+  grid_storage = malloc(n * n * sizeof(*grid_storage));
+  if (!grid_storage) die("grid storage allocation failed");
+  grid = malloc(n * sizeof(*grid));
+  if (!grid) { free(grid_storage); die("grid row allocation failed"); }
+  for (int i=0;i<N;++i) grid[i] = grid_storage + (size_t)i*n;
+}
+
+static void release_grid(void) {
+  free(grid_storage);
+  free(grid);
+}
 
 // you can also use this function to debug print your sandpile
 static void render(char *filename) {
@@ -205,17 +223,11 @@ int main(int argc, char **argv) {
     die("grid size must be a positive int");
   N = (int)parsed;
 
-  grid = (int **)malloc(N * sizeof(int *));
-  for (int i = 0; i < N; ++i) {
-    grid[i] = (int *)malloc(N * sizeof(int));
-  }
+  allocate_grid();
 
   find_identity();
 
   render("identity.png");
-  for (int i = 0; i < N; ++i) {
-    free(grid[i]);
-  }
-  free(grid);
+  release_grid();
   return EXIT_SUCCESS;
 }
