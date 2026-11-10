@@ -48,6 +48,7 @@ def main():
     p.add_argument('--row-results',type=pathlib.Path,default=ROOT/'results/latest-row-intervals')
     p.add_argument('--target-runs',type=int,default=1)
     p.add_argument('--skip-target',action='store_true')
+    p.add_argument('--small-max',type=int,default=501,choices=[251,501])
     p.add_argument('--deadline',help='ISO Central time; reserve 5 minutes after this workflow')
     a=p.parse_args(); r=a.output.resolve(); b=a.baseline.resolve(); row=a.row_results.resolve(); r.mkdir()
     deadline=datetime.datetime.fromisoformat(a.deadline).replace(tzinfo=ZoneInfo('America/Chicago')).timestamp() if a.deadline else float('inf')
@@ -85,7 +86,7 @@ def main():
         source=r/'source/sandpile.c'; binary=r/'source/sandpile.exe'
         save('build-hashes.json',dict(source=digest(source),binary=digest(binary),archive=digest(r/'source.tar')))
         event('small-correctness')
-        run([sys.executable,ROOT/'scripts/check.py','--source',source,'--binary',binary,'--output',r/'small-correctness','--reference-png',b/'source/identity-ref.png','--golden',row/'expected','--sizes',*SMALL],r,'small-correctness',timeout=600)
+        run([sys.executable,ROOT/'scripts/check.py','--source',source,'--binary',binary,'--output',r/'small-correctness','--reference-png',b/'source/identity-ref.png','--golden',row/'expected','--sizes',*[n for n in SMALL if n<=a.small_max]],r,'small-correctness',timeout=600)
         assert json.loads((r/'small-correctness/report.json').read_text())['status']=='PASS'
         event('both-stages-and-work-counters')
         diag=r/'diagnostic.c'; diag.write_text(instrument(source)); exe=r/'bin/diagnostic.exe'
@@ -124,7 +125,7 @@ def main():
             print(json.dumps(record),flush=True); return record
         # Same excluded N=101 preflight as prior studies; no target warmup.
         run_one(binary,r/'timing/preflight-n101',101,0,timeout=60)
-        for n in [101,251,501]:
+        for n in [n for n in [101,251,501] if n<=a.small_max]:
             for k in range(1,4): measure(n,k,90)
         if not a.skip_target:
             event('target-release-first')
