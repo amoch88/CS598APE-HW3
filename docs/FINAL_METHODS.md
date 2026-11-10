@@ -85,6 +85,23 @@ worklist benefit relative to a cumulative batching variant. The row-batch-bound
 refinement is a separate measured configuration, not folded into the first
 batching result. Raw source SHAs identify each configuration.
 
+5. **Alternating sweeps (ordering/work reduction).** Alternate forward and
+   reverse complete active-cell passes. Each pass performs only legal topplings;
+   an unchanged pass proves stability, and the Abelian final state/odometer
+   preserves every physical sink counter. This addresses directional propagation
+   delay without FIFO membership bookkeeping. The independent N=251 diagnostic
+   reduces sweeps from 9,007 to 8,707. Target observations are recorded separately.
+
+6. **Padded boundaries (loop/data-layout change).** Add one sink cell around the
+   physical square using separately allocated padded rows. Only the safe kernel
+   updates all four neighbors unconditionally. Clear the halo before each phase
+   so the positive-grain bound covers it. Halo cells never topple, feed back,
+   complement, render or enter physical integer comparisons. The checked fallback
+   retains physical boundary guards. Shared production/test allocators ensure
+   integer and sanitizer checks exercise the actual layout. Physical visit order
+   and all N=251 work counters are unchanged. See ADDITIONAL_EXPERIMENTS.md for
+   the proof and independent parent/candidate observations.
+
 ## Measurement and validation
 
 All measurements run directly on fa26-cs598a-022.cs.illinois.edu: VMware,
@@ -105,7 +122,11 @@ sample standard deviation. Three-run distributions use median, min/max, mean,
 and sample standard deviation; plot whiskers show observed ranges, not confidence
 intervals. GNU time's 0.01-second precision makes N=101 ratios coarse and can
 produce a reported SD of zero despite real variation. VM scheduling/frequency
-and host interference are not fully controlled.
+and host interference are not fully controlled. Bounded batching's third target
+observation resumed after the usage-limit interruption and deadline extension;
+the earlier two observations were retained. Current host/kernel/GCC/CPU model,
+source commit and binary hashes matched. No extra full-size warmup was inserted.
+The resumed timing is a separate session, not a paired observation.
 
 Correctness gates before release benchmarking include final integer comparisons
 for all tested sizes through N=501 (or N=251 for worklist screening), active
@@ -136,9 +157,14 @@ The starter's CLI accepts much larger sizes, but its renderer indexing and
 unchecked main-grid allocations are legacy limitations. The new grain arithmetic
 checks do not constitute a general audit of arbitrary huge allocations.
 
-Contiguous storage is deferred: no cache-miss profile establishes a layout
-bottleneck, and completing validation and reproduction takes priority. No OpenMP,
-GPU, compiler-flag, renderer, PNG-library or application-layout change is included.
+Contiguous storage and an explicit remainder-mask update were independently
+screened and rejected: larger paired sizes showed no useful gain. The remainder
+variant's machine-code text is byte-identical to its parent. Alternating sweeps
+and padding were promoted to separate target timing/integer checks. Only verified
+improvements may enter the final combination. See ADDITIONAL_EXPERIMENTS.md and
+FINAL_REPORT_NOTES.md for exact results and selection.
+
+No OpenMP, GPU, compiler-flag, renderer or PNG-library changes are included.
 There is no standalone original-geometry batching benchmark; batching is measured
-relative to the retained row optimization. Worklist target measurements are
-conditional on smaller-size evidence and the strict deadline.
+relative to the retained row optimization. Rejected FIFO/contiguous/remainder
+screens have no target-size measurements or target-size integer claims.
