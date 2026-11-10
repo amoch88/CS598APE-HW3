@@ -19,7 +19,7 @@ for study in a.studies:
     variants[name]={'source_commit':m['source_commit'],'results':str(study),'status':status}
     if (study/'measurements.csv').exists(): ingest(study/'measurements.csv',name,m['source_commit'])
     dest=out/name;dest.mkdir()
-    names=['manifest.json','status.json','environment.txt','environment-comparison.json','build-hashes.json','commands.jsonl','measurements.csv','stages.json','memory-safety.json','error.txt','repeat-manifest.json','final-validation.json']
+    names=['manifest.json','status.json','environment.txt','environment-comparison.json','build-hashes.json','commands.jsonl','measurements.csv','stages.json','memory-safety.json','error.txt','repeat-manifest.json','final-validation.json','final-clean-build.log','post-rebuild-correctness/report.json','post-rebuild-overflow/report.json']
     names += ['small-correctness/report.json','target-correctness/report.json','overflow-checks/report.json','memcheck-n101/run.stderr']
     names += [f'diagnostic-n{n}/phase-{k}.json' for n in [2,31,32,251] for k in [1,2]]
     names += [f'asan-n{n}/run.stderr' for n in [1,2,3,4,31,32,101]]
