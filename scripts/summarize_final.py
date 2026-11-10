@@ -20,6 +20,8 @@ for study in a.studies:
     if (study/'measurements.csv').exists(): ingest(study/'measurements.csv',name,m['source_commit'])
     dest=out/name;dest.mkdir()
     names=['manifest.json','status.json','environment.txt','environment-comparison.json','build-hashes.json','source-preservation.json','commands.jsonl','measurements.csv','stages.json','memory-safety.json','error.txt','workflow-interruption.json','repeat-manifest.json','final-validation.json','final-clean-build.log','post-rebuild-correctness/report.json','post-rebuild-overflow/report.json','callgrind-n101/summary.json','callgrind-n101/run.stderr','callgrind-n101/annotated.txt']
+    names += [str(x.relative_to(study)) for x in sorted(study.glob('repeat-continuation-*.json'))]
+    names += ['recovery-audit.json','resume-target.log','repeat.log']
     names += ['small-correctness/report.json','target-correctness/report.json','overflow-checks/report.json','memcheck-n101/run.stderr']
     names += [f'diagnostic-n{n}/phase-{k}.json' for n in [2,31,32,251] for k in [1,2]]
     names += [f'asan-n{n}/run.stderr' for n in [1,2,3,4,31,32,101]]
@@ -45,7 +47,7 @@ for name in variants:
 lines=['| Configuration | N | Runs (seconds) | Median | Range | Sample SD | vs original | vs rows |','|---|---:|---|---:|---|---:|---:|---:|']
 for x in summary:
     sd='unavailable (one run)' if x['sample_sd_seconds'] is None else f"{x['sample_sd_seconds']:.4f}"
-    lines.append(f"| {x['variant']} | {x['size']} | {', '.join(f'{v:.2f}' for v in x['values_seconds'])} | {x['median_seconds']:.2f} | {x['min_seconds']:.2f}?{x['max_seconds']:.2f} | {sd} | {x['speedup_original']:.3f}x | {x['speedup_row']:.3f}x |")
+    lines.append(f"| {x['variant']} | {x['size']} | {', '.join(f'{v:.2f}' for v in x['values_seconds'])} | {x['median_seconds']:.2f} | {x['min_seconds']:.2f} - {x['max_seconds']:.2f} | {sd} | {x['speedup_original']:.3f}x | {x['speedup_row']:.3f}x |")
 (out/'tables.md').write_text('\n'.join(lines)+'\n')
 hashes={str(x.relative_to(out)):hashlib.sha256(x.read_bytes()).hexdigest() for x in sorted(out.rglob('*')) if x.is_file()}
 (out/'manifest.json').write_text(json.dumps(dict(files=hashes,baseline_results=str(b),row_results=str(row),generator_commit=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),generator_sha256=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
