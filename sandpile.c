@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <math.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,6 +102,14 @@ static struct active_row *precompute_active_rows(void) {
   return rows;
 }
 
+// Positive increments are checked before addition; q*4 cannot exceed the
+// current nonnegative int height. Inactive cells retain their sink counters.
+static void add_grains(int *cell, int q) {
+  if (*cell > INT_MAX - q)
+    die("integer overflow in grain accumulation");
+  *cell += q;
+}
+
 static void stabilize() {
   struct active_row *rows = precompute_active_rows();
   int changed = 0;
@@ -111,15 +120,17 @@ static void stabilize() {
         if (grid[i][j] < 4)
           continue;
         changed = 1; // topple it
-        grid[i][j] -= 4;
+        // q successive topplings are legal: before the last, height >= 4.
+        int q = grid[i][j] / 4;
+        grid[i][j] -= 4 * q;
         if (i > 0)
-          grid[i - 1][j]++;
+          add_grains(&grid[i - 1][j], q);
         if (j > 0)
-          grid[i][j - 1]++;
+          add_grains(&grid[i][j - 1], q);
         if (i < N - 1)
-          grid[i + 1][j]++;
+          add_grains(&grid[i + 1][j], q);
         if (j < N - 1)
-          grid[i][j + 1]++;
+          add_grains(&grid[i][j + 1], q);
       }
     }
   } while (changed);
