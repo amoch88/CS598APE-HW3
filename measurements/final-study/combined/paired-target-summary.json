@@ -1,0 +1,30 @@
+[
+  {
+    "variant": "combined",
+    "source_commit": "245fad1455fe7dd9033b64732e259534c40cd5a0",
+    "values_seconds": [
+      236.66,
+      235.37,
+      235.71
+    ],
+    "median_seconds": 235.71,
+    "min_seconds": 235.37,
+    "max_seconds": 236.66,
+    "mean_seconds": 235.91333333333333,
+    "sample_sd_seconds": 0.6686055139866307
+  },
+  {
+    "variant": "padded",
+    "source_commit": "1080490846c96703f0734771560e729b9224cf73",
+    "values_seconds": [
+      259.78,
+      259.47,
+      259.41
+    ],
+    "median_seconds": 259.47,
+    "min_seconds": 259.41,
+    "max_seconds": 259.78,
+    "mean_seconds": 259.55333333333334,
+    "sample_sd_seconds": 0.19857828011472275
+  }
+]

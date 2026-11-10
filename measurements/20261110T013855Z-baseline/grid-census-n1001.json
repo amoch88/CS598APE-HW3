@@ -1,0 +1,15 @@
+{
+  "size": 1001,
+  "allocated_cells": 1002001,
+  "active_cells": 589365,
+  "active_histogram": {
+    "0": 64307,
+    "2": 138961,
+    "3": 354068,
+    "1": 32029
+  },
+  "inactive_cells": 412636,
+  "inactive_negative_cells": 2829,
+  "min_value": -6047,
+  "max_value": 3
+}

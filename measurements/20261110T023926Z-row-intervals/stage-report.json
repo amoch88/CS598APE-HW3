@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "size": 2,
+      "both_stages_all_allocated_integers": "PASS"
+    },
+    {
+      "size": 31,
+      "both_stages_all_allocated_integers": "PASS"
+    },
+    {
+      "size": 32,
+      "both_stages_all_allocated_integers": "PASS"
+    },
+    {
+      "size": 251,
+      "both_stages_all_allocated_integers": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "padded",
+  "source_commit": "1080490846c96703f0734771560e729b9224cf73",
+  "cpu": 0,
+  "flags": "-O3 -lm -g -Werror",
+  "baseline": "/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline",
+  "row_results": "/home/am88/CS598APE-HW3/results/20261110T023926Z-row-intervals",
+  "target_runs_requested": 1,
+  "deadline": "2026-11-10T04:20:00",
+  "parent_study": "/home/am88/CS598APE-HW3/results/20261110T035148Z-batch-bounded",
+  "paired_seed": 598
+}

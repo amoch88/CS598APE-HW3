@@ -1,0 +1,33 @@
+{
+  "baseline_source_commit": "15fe837445b8e32a15ac61fcfa388980b54d9173",
+  "candidate_source_commit": "7fd71987e27f00d690e5e0348d5701a76a12ca0b",
+  "baseline_results": "/home/am88/CS598APE-HW3/results/20261110T013855Z-baseline",
+  "cpu": 0,
+  "flags": "-O3 -lm -g -Werror",
+  "historical_target_baseline": true,
+  "release_target_runs_requested": 3,
+  "exploratory_sizes": [
+    101,
+    251,
+    501
+  ],
+  "correctness_sizes": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    15,
+    16,
+    31,
+    32,
+    101,
+    251,
+    501,
+    1001
+  ],
+  "seed": 598
+}

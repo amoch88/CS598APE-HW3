@@ -1,0 +1,13 @@
+{
+  "start_utc": "2026-11-10T08:20:29.963596+00:00",
+  "size": 1001,
+  "cpu": 0,
+  "wall_seconds": 236.66,
+  "user_seconds": 236.55,
+  "system_seconds": 0.07,
+  "max_rss_kib": 12484,
+  "exit_status": 0,
+  "launcher_wall_seconds": 236.70269205,
+  "png_sha256": "4883dba5b09236b78477ca25c9395411fc1f82f4233aaa378193d7925269dbbe",
+  "directory": "/home/am88/CS598APE-HW3/results/20261110T081751Z-combined/timing/n1001-run1"
+}

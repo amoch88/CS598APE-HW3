@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "root_build": "make all",
+  "source_commit": "245fad1455fe7dd9033b64732e259534c40cd5a0",
+  "source_sha256": "7dad0f3a4122f2d4e3e9693ccb9b2ec0a2ea5c4e07975b872a397d1664144b41",
+  "prior_root_binary_sha256": "74e0ea011be7cd76c3859cf2dc4eace2d893313acfae0fdd98aae6ffa60081c0",
+  "prior_root_binary_preserved": "/home/am88/CS598APE-HW3/results/final-clone-smoke-20261110T085458Z/prior-root-sandpile.exe",
+  "final_root_binary_sha256": "e078c080adef65029cf25ca496913ce55a61f6f54984d310472ccf2475e7793b",
+  "measured_sections_identical": {
+    ".text": true,
+    ".rodata": true,
+    ".data": true
+  },
+  "root_cli_n101_comparison": {
+    "width": 101,
+    "height": 101,
+    "decoded_rgb_sha256": "c1bcef1e852fd0a8a5931f1a40c533e2ecc931a81b06b0e16b948e55fb6820ee",
+    "mismatched_channels": 0
+  },
+  "preexisting_root_png_unchanged": true
+}

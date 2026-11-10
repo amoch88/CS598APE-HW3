@@ -1,0 +1,82 @@
+[
+  {
+    "size": 2,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": 1,
+        "sweeps": 0,
+        "visits": 6,
+        "events": 6,
+        "unit_topplings": 6
+      },
+      {
+        "phase": 2,
+        "sweeps": 0,
+        "visits": 3,
+        "events": 3,
+        "unit_topplings": 3
+      }
+    ]
+  },
+  {
+    "size": 31,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": 1,
+        "sweeps": 0,
+        "visits": 34470,
+        "events": 34470,
+        "unit_topplings": 34470
+      },
+      {
+        "phase": 2,
+        "sweeps": 0,
+        "visits": 14913,
+        "events": 14913,
+        "unit_topplings": 14913
+      }
+    ]
+  },
+  {
+    "size": 32,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": 1,
+        "sweeps": 0,
+        "visits": 41516,
+        "events": 41516,
+        "unit_topplings": 41516
+      },
+      {
+        "phase": 2,
+        "sweeps": 0,
+        "visits": 17847,
+        "events": 17847,
+        "unit_topplings": 17847
+      }
+    ]
+  },
+  {
+    "size": 251,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": 1,
+        "sweeps": 0,
+        "visits": 131945672,
+        "events": 131945672,
+        "unit_topplings": 131945672
+      },
+      {
+        "phase": 2,
+        "sweeps": 0,
+        "visits": 47820430,
+        "events": 47820430,
+        "unit_topplings": 47820430
+      }
+    ]
+  }
+]

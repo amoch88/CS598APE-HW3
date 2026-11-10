@@ -1,0 +1,484 @@
+{
+  "source_sha256": "4cb176299618767a457dc1c23a955efe59b80417a658d65688ce23efcc722719",
+  "adapter_build_command": [
+    "gcc",
+    "-O3",
+    "-g",
+    "-DSANDPILE_SOURCE=\"/home/am88/CS598APE-HW3/results/20261110T035148Z-batch-bounded/source/sandpile.c\"",
+    "/home/am88/CS598APE-HW3/tests/grid_driver.c",
+    "-o",
+    "/home/am88/CS598APE-HW3/results/20261110T035148Z-batch-bounded/post-rebuild-correctness/grid-driver.exe",
+    "-lm"
+  ],
+  "seed": 598,
+  "checks": [
+    {
+      "kind": "identity",
+      "size": 1,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 1,
+        "computation_seconds": 2.633e-06,
+        "grid_dump_seconds": 9.6436e-05,
+        "render_seconds": 0.000136162
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 2,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 2,
+        "computation_seconds": 1.587e-06,
+        "grid_dump_seconds": 7.9756e-05,
+        "render_seconds": 0.000132662
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 3,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 3,
+        "computation_seconds": 1.601e-06,
+        "grid_dump_seconds": 0.000118821,
+        "render_seconds": 0.000133537
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 4,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 4,
+        "computation_seconds": 2.642e-06,
+        "grid_dump_seconds": 9.0307e-05,
+        "render_seconds": 0.000128377
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 5,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 5,
+        "computation_seconds": 2.671e-06,
+        "grid_dump_seconds": 7.5269e-05,
+        "render_seconds": 0.000127473
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 6,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 6,
+        "computation_seconds": 6.24e-06,
+        "grid_dump_seconds": 7.6105e-05,
+        "render_seconds": 0.000128299
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 7,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 7,
+        "computation_seconds": 4.985e-06,
+        "grid_dump_seconds": 0.000103902,
+        "render_seconds": 0.000133513
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 8,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 8,
+        "computation_seconds": 7.727e-06,
+        "grid_dump_seconds": 9.389e-05,
+        "render_seconds": 0.000146904
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 15,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 15,
+        "computation_seconds": 3.5683e-05,
+        "grid_dump_seconds": 0.000102145,
+        "render_seconds": 0.00025269
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 16,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 16,
+        "computation_seconds": 5.1676e-05,
+        "grid_dump_seconds": 0.00010237,
+        "render_seconds": 0.000258195
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 31,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 31,
+        "computation_seconds": 0.000462893,
+        "grid_dump_seconds": 0.00019125,
+        "render_seconds": 0.000347642
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 32,
+      "all_allocated_cells_compared_to_oracle": true,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 32,
+        "computation_seconds": 0.000517462,
+        "grid_dump_seconds": 0.000173658,
+        "render_seconds": 0.000357843
+      }
+    },
+    {
+      "kind": "identity",
+      "size": 101,
+      "all_allocated_cells_compared_to_oracle": false,
+      "all_allocated_cells_compared_to_golden": true,
+      "active_stability": "PASS",
+      "grid_palette": "PASS",
+      "release_adapter_pixels": "PASS",
+      "adapter_times": {
+        "size": 101,
+        "computation_seconds": 0.034745197,
+        "grid_dump_seconds": 0.000970134,
+        "render_seconds": 0.001719739
+      }
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 0,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 1,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 2,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 3,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 4,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 5,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 6,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 7,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 8,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 9,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 10,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 11,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 12,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 13,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 14,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 15,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 16,
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 17,
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 18,
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 19,
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 20,
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 21,
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 22,
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "random-stabilization-and-idempotence",
+      "trial": 23,
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 1,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 2,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 3,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 4,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 5,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 6,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 7,
+      "status": "PASS"
+    },
+    {
+      "kind": "identity-idempotence",
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "recurrent-identity-action",
+      "size": 8,
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "0"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "-1"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "abc"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "12x"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "2147483648"
+      ],
+      "status": "PASS"
+    },
+    {
+      "kind": "invalid-cli",
+      "args": [
+        "2",
+        "extra"
+      ],
+      "status": "PASS"
+    }
+  ],
+  "status": "PASS"
+}

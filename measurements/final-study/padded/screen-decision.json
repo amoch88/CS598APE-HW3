@@ -1,0 +1,48 @@
+{
+  "promote": true,
+  "criterion": "N501 paired median speedup >1.01 and N251 >=1.0; correctness PASS",
+  "paired": [
+    {
+      "size": 101,
+      "candidate": [
+        0.03,
+        0.03,
+        0.03
+      ],
+      "parent": [
+        0.04,
+        0.03,
+        0.04
+      ],
+      "median_speedup": 1.3333333333333335
+    },
+    {
+      "size": 251,
+      "candidate": [
+        1.15,
+        1.11,
+        1.1
+      ],
+      "parent": [
+        1.14,
+        1.15,
+        1.24
+      ],
+      "median_speedup": 1.036036036036036
+    },
+    {
+      "size": 501,
+      "candidate": [
+        16.67,
+        16.76,
+        16.74
+      ],
+      "parent": [
+        17.25,
+        17.39,
+        17.39
+      ],
+      "median_speedup": 1.0388291517323778
+    }
+  ]
+}

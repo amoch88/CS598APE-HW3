@@ -1,0 +1,7 @@
+{
+  "gcc": true,
+  "cpu_model": true,
+  "kernel": true,
+  "hostname": true,
+  "cpu0_available": true
+}

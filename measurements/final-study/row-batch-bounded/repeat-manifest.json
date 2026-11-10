@@ -1,0 +1,7 @@
+{
+  "source_commit": "50970858a53845220b44f604e62223c2ea7f1ea1",
+  "initial_target_count": 1,
+  "requested_target_count": 3,
+  "deadline": "2026-11-09T22:15:00",
+  "reason": "promising candidate already passed target integer correctness"
+}

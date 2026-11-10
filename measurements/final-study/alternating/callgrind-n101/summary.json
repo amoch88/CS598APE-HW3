@@ -1,0 +1,25 @@
+{
+  "size": 101,
+  "events": "Ir only; no hardware/cache counters",
+  "total_instructions": 161028035,
+  "source_commit": "c248ea4ea6ea2c5705e2579fd20e0e47e7599f7d",
+  "command": [
+    "timeout",
+    "--kill-after=5",
+    "90",
+    "taskset",
+    "-c",
+    "0",
+    "valgrind",
+    "--tool=callgrind",
+    "--callgrind-out-file=/home/am88/CS598APE-HW3/results/20261110T075051Z-alternating/callgrind-n101/callgrind.out",
+    "/home/am88/CS598APE-HW3/results/20261110T075051Z-alternating/source/sandpile.exe",
+    "101"
+  ],
+  "pixel_comparison": {
+    "width": 101,
+    "height": 101,
+    "decoded_rgb_sha256": "c1bcef1e852fd0a8a5931f1a40c533e2ecc931a81b06b0e16b948e55fb6820ee",
+    "mismatched_channels": 0
+  }
+}

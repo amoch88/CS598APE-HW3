@@ -1,0 +1,48 @@
+{
+  "promote": false,
+  "criterion": "No useful N251/N501 paired improvement",
+  "paired": [
+    {
+      "size": 101,
+      "candidate": [
+        0.03,
+        0.03,
+        0.03
+      ],
+      "parent": [
+        0.04,
+        0.03,
+        0.04
+      ],
+      "median_speedup": 1.3333333333333335
+    },
+    {
+      "size": 251,
+      "candidate": [
+        1.14,
+        1.14,
+        1.15
+      ],
+      "parent": [
+        1.15,
+        1.14,
+        1.14
+      ],
+      "median_speedup": 1.0
+    },
+    {
+      "size": 501,
+      "candidate": [
+        17.23,
+        17.29,
+        17.38
+      ],
+      "parent": [
+        17.21,
+        17.23,
+        17.21
+      ],
+      "median_speedup": 0.995373048004627
+    }
+  ]
+}

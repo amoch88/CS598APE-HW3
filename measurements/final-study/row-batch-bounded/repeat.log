@@ -1,0 +1,8 @@
+Mon Nov  9 10:04:04 PM CST 2026
+{"variant": "row-batch-bounded", "source_commit": "50970858a53845220b44f604e62223c2ea7f1ea1", "run": 2, "start_utc": "2026-11-10T04:04:04.667167+00:00", "size": 1001, "cpu": 0, "wall_seconds": 269.98, "user_seconds": 269.95, "system_seconds": 0.01, "max_rss_kib": 12628, "exit_status": 0, "launcher_wall_seconds": 270.02427804, "png_sha256": "4883dba5b09236b78477ca25c9395411fc1f82f4233aaa378193d7925269dbbe", "directory": "/home/am88/CS598APE-HW3/results/20261110T035148Z-batch-bounded/timing/n1001-run2"}
+Mon Nov  9 10:08:37 PM CST 2026
+Traceback (most recent call last):
+  File "/home/am88/CS598APE-HW3/scripts/repeat_candidate.py", line 18, in <module>
+    if deadline-time.time()<estimate*1.2+60:raise RuntimeError('deadline guard: insufficient time for another target run')
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: deadline guard: insufficient time for another target run

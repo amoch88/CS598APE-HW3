@@ -1,0 +1,16 @@
+{
+  "exploratory_size": 251,
+  "total_sweeps": 10965,
+  "scan_visits": 519477840,
+  "active_visits": 404564640,
+  "unit_topplings": 179766102,
+  "inactive_scan_percent": 22.120905099628505,
+  "stable_active_visit_percent": 55.56554275232754,
+  "unstable_scan_visit_percent": 34.60515312837984,
+  "q2_at_unstable_visit_percent": 35.104346869578336,
+  "gprof_geometry_lines_81_82_percent": 27.520000000000003,
+  "gprof_loop_lines_79_80_percent": 23.650000000000002,
+  "gprof_stability_line_83_percent": 10.85,
+  "gprof_neighbor_lines_87_to_94_percent": 30.61,
+  "gprof_subtract_line_86_percent": 7.36
+}

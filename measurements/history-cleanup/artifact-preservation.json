@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "old_final": "4014209c48f41173aa7359a6226aab445def0a90",
+  "original_tracked_file_count": 719,
+  "deleted_original_files": [],
+  "changed_original_files": [
+    "README.md",
+    "docs/FINAL_REPORT_NOTES.md",
+    "docs/FINAL_REPRODUCTION.md"
+  ],
+  "all_changed_documents_preserve_original_prefix": true,
+  "all_existing_scripts_tests_measurements_figures_identical": true,
+  "production_files": {
+    "sandpile.c": "100644 blob 6810aa7e27848621098c9ce9cd5417b5fd80f075",
+    "Makefile": "100644 blob 950b0d63de7294f14509bbc961cd20ff37ae4c4f",
+    "stb_image_write.h": "100644 blob e4b32ed1bc32ef9c962acbf47a9d10af01939e08",
+    "identity-ref.png": "100644 blob f819e6d729f44c3124088542eca77e896609299e"
+  },
+  "flags": "-O3 -lm -g -Werror",
+  "fourth_commit_ref": "hw3-submission-clean"
+}

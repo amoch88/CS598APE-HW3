@@ -1,0 +1,82 @@
+[
+  {
+    "size": 2,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": 1,
+        "sweeps": 0,
+        "visits": 5,
+        "events": 5,
+        "unit_topplings": 6
+      },
+      {
+        "phase": 2,
+        "sweeps": 0,
+        "visits": 3,
+        "events": 3,
+        "unit_topplings": 3
+      }
+    ]
+  },
+  {
+    "size": 31,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": 1,
+        "sweeps": 0,
+        "visits": 27100,
+        "events": 27100,
+        "unit_topplings": 34470
+      },
+      {
+        "phase": 2,
+        "sweeps": 0,
+        "visits": 14900,
+        "events": 14900,
+        "unit_topplings": 14913
+      }
+    ]
+  },
+  {
+    "size": 32,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": 1,
+        "sweeps": 0,
+        "visits": 32701,
+        "events": 32701,
+        "unit_topplings": 41516
+      },
+      {
+        "phase": 2,
+        "sweeps": 0,
+        "visits": 17840,
+        "events": 17840,
+        "unit_topplings": 17847
+      }
+    ]
+  },
+  {
+    "size": 251,
+    "status": "PASS",
+    "phases": [
+      {
+        "phase": 1,
+        "sweeps": 0,
+        "visits": 104394196,
+        "events": 104394196,
+        "unit_topplings": 131945672
+      },
+      {
+        "phase": 2,
+        "sweeps": 0,
+        "visits": 47819060,
+        "events": 47819060,
+        "unit_topplings": 47820430
+      }
+    ]
+  }
+]

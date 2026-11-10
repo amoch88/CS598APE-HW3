@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "bounded-large-quotient",
+      "status": "PASS",
+      "initial_positive_sum": 2147483647
+    },
+    {
+      "name": "checked-fallback",
+      "status": "PASS",
+      "initial_positive_sum": 2147483667
+    },
+    {
+      "name": "negative-sinks",
+      "status": "PASS",
+      "initial_positive_sum": 18
+    },
+    {
+      "name": "overflow-rejection",
+      "status": "PASS",
+      "exit_status": 1,
+      "stderr": "integer overflow in grain accumulation\n"
+    }
+  ]
+}

@@ -143,49 +143,92 @@ static void add_grains(int *cell, int q) {
   *cell += q;
 }
 
+// Alternate complete legal passes; an unchanged pass establishes stability.
 static void stabilize_checked(const struct active_row *rows) {
   int changed = 0;
+  int reverse = 0;
   do {
     changed = 0;
-    for (int i = 0; i < N; ++i) {
-      for (int j = rows[i].first; j <= rows[i].last; ++j) {
-        if (grid[i][j] < 4)
-          continue;
-        changed = 1; // topple it
-        // q successive topplings are legal: before the last, height >= 4.
-        int q = grid[i][j] / 4;
-        grid[i][j] -= 4 * q;
-        if (i > 0)
-          add_grains(&grid[i - 1][j], q);
-        if (j > 0)
-          add_grains(&grid[i][j - 1], q);
-        if (i < N - 1)
-          add_grains(&grid[i + 1][j], q);
-        if (j < N - 1)
-          add_grains(&grid[i][j + 1], q);
+    if (!reverse) {
+      for (int i = 0; i < N; ++i) {
+        for (int j = rows[i].first; j <= rows[i].last; ++j) {
+          if (grid[i][j] < 4)
+            continue;
+          changed = 1; // topple it
+          // q successive topplings are legal: before the last, height >= 4.
+          int q = grid[i][j] / 4;
+          grid[i][j] -= 4 * q;
+          if (i > 0)
+            add_grains(&grid[i - 1][j], q);
+          if (j > 0)
+            add_grains(&grid[i][j - 1], q);
+          if (i < N - 1)
+            add_grains(&grid[i + 1][j], q);
+          if (j < N - 1)
+            add_grains(&grid[i][j + 1], q);
+        }
+      }
+    } else {
+      for (int i = N - 1; i >= 0; --i) {
+        for (int j = rows[i].last; j >= rows[i].first; --j) {
+          if (grid[i][j] < 4)
+            continue;
+          changed = 1; // topple it
+          // q successive topplings are legal: before the last, height >= 4.
+          int q = grid[i][j] / 4;
+          grid[i][j] -= 4 * q;
+          if (i > 0)
+            add_grains(&grid[i - 1][j], q);
+          if (j > 0)
+            add_grains(&grid[i][j - 1], q);
+          if (i < N - 1)
+            add_grains(&grid[i + 1][j], q);
+          if (j < N - 1)
+            add_grains(&grid[i][j + 1], q);
+        }
       }
     }
+    reverse = !reverse;
   } while (changed);
 }
 
 static void stabilize_bounded(const struct active_row *rows) {
   int changed = 0;
+  int reverse = 0;
   do {
     changed = 0;
-    for (int i = 0; i < N; ++i) {
-      for (int j = rows[i].first; j <= rows[i].last; ++j) {
-        if (grid[i][j] < 4)
-          continue;
-        changed = 1; // topple it
-        // q successive topplings are legal: before the last, height >= 4.
-        int q = grid[i][j] / 4;
-        grid[i][j] -= 4 * q;
-        grid[i - 1][j] += q;
-        grid[i][j - 1] += q;
-        grid[i + 1][j] += q;
-        grid[i][j + 1] += q;
+    if (!reverse) {
+      for (int i = 0; i < N; ++i) {
+        for (int j = rows[i].first; j <= rows[i].last; ++j) {
+          if (grid[i][j] < 4)
+            continue;
+          changed = 1; // topple it
+          // q successive topplings are legal: before the last, height >= 4.
+          int q = grid[i][j] / 4;
+          grid[i][j] -= 4 * q;
+          grid[i - 1][j] += q;
+          grid[i][j - 1] += q;
+          grid[i + 1][j] += q;
+          grid[i][j + 1] += q;
+        }
+      }
+    } else {
+      for (int i = N - 1; i >= 0; --i) {
+        for (int j = rows[i].last; j >= rows[i].first; --j) {
+          if (grid[i][j] < 4)
+            continue;
+          changed = 1; // topple it
+          // q successive topplings are legal: before the last, height >= 4.
+          int q = grid[i][j] / 4;
+          grid[i][j] -= 4 * q;
+          grid[i - 1][j] += q;
+          grid[i][j - 1] += q;
+          grid[i + 1][j] += q;
+          grid[i][j + 1] += q;
+        }
       }
     }
+    reverse = !reverse;
   } while (changed);
 }
 

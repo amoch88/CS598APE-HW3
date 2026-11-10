@@ -1,0 +1,13 @@
+{
+  "start_utc": "2026-11-10T07:54:42.628292+00:00",
+  "size": 251,
+  "cpu": 0,
+  "wall_seconds": 1.24,
+  "user_seconds": 1.24,
+  "system_seconds": 0.0,
+  "max_rss_kib": 2992,
+  "exit_status": 0,
+  "launcher_wall_seconds": 1.2680437,
+  "png_sha256": "8f73a21794ef6a00bbec0df1cdbce5b67e7515ed2f7454e01f44c4115a1b1fd7",
+  "directory": "/home/am88/CS598APE-HW3/results/20261110T075341Z-padded/timing/parent-n251-run3"
+}
