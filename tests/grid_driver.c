@@ -1,4 +1,4 @@
-/* Test-only adapter: include the unchanged implementation, expose its grid. */
+/* Test-only adapter: include the specified implementation, expose its grid. */
 #define main starter_main
 #include SANDPILE_SOURCE
 #undef main
@@ -13,12 +13,16 @@ int main(int argc, char **argv) {
   if (argc != 4 && argc != 5) die("identity N output.grid | stabilize N input.grid output.grid");
   N = atoi(argv[2]);
   if (N < 1 || N > 1001) die("test adapter supports sizes 1..1001");
+#ifdef SANDPILE_GRID_ALLOCATORS
+  allocate_grid();
+#else
   grid = malloc((size_t)N * sizeof(*grid));
   if (!grid) die("allocation failed");
   for (int i=0;i<N;i++) {
     grid[i] = malloc((size_t)N * sizeof(**grid));
     if (!grid[i]) die("allocation failed");
   }
+#endif
   double compute_started=adapter_now();
   const char *output;
   if (!strcmp(argv[1], "identity") && argc == 4) {
@@ -46,6 +50,10 @@ int main(int argc, char **argv) {
   if(!timing) die("cannot create adapter timing");
   fprintf(timing,"{\"size\":%d,\"computation_seconds\":%.9f,\"grid_dump_seconds\":%.9f,\"render_seconds\":%.9f}\n",N,compute_seconds,dump_seconds,render_seconds);
   if(fclose(timing)) die("cannot write adapter timing");
+#ifdef SANDPILE_GRID_ALLOCATORS
+  release_grid();
+#else
   for(int i=0;i<N;i++) free(grid[i]); free(grid);
+#endif
   return 0;
 }

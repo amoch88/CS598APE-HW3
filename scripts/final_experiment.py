@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Bounded, sequential validation and release timing for an archived source commit."""
-import argparse, csv, datetime, hashlib, json, os, pathlib, signal, subprocess, sys, time, traceback
+import argparse, csv, datetime, hashlib, json, os, pathlib, random, signal, subprocess, sys, time, traceback
 from zoneinfo import ZoneInfo
 from benchmark import run_one, digest
 from check import compare_grids, load_grid, reference_stabilize
@@ -36,7 +36,7 @@ def instrument(source):
         s=s.replace('    changed = 0;','    changed = 0;\n    work.sweeps++;')
         s=s.replace('        if (grid[i][j] < 4)','        work.visits++;\n        if (grid[i][j] < 4)')
     anchor='grid[i][j] -= 4 * q;'
-    if s.count(anchor) not in [1,2]: raise ValueError('unexpected toppling instrumentation anchors')
+    if s.count(anchor) not in [1,2,4]: raise ValueError('unexpected toppling instrumentation anchors')
     s=s.replace(anchor,'work.events++; work.unit_topplings += (uint64_t)q;\n        '+anchor)
     if s.count('  stabilize();')!=2: raise ValueError('expected two identity phases')
     return s.replace('  stabilize();','  stabilize();\n  save_phase();')
@@ -47,6 +47,7 @@ def main():
     p.add_argument('--output',type=pathlib.Path,required=True)
     p.add_argument('--baseline',type=pathlib.Path,default=ROOT/'results/latest-baseline')
     p.add_argument('--row-results',type=pathlib.Path,default=ROOT/'results/latest-row-intervals')
+    p.add_argument('--parent-study',type=pathlib.Path)
     p.add_argument('--target-runs',type=int,default=1)
     p.add_argument('--skip-target',action='store_true')
     p.add_argument('--small-max',type=int,default=501,choices=[251,501])
@@ -69,7 +70,7 @@ def main():
         if rc: raise RuntimeError(f'{name} exited {rc}; see {d}')
     try:
         commit=subprocess.check_output(['git','rev-parse',a.commit],cwd=ROOT,text=True).strip()
-        save('manifest.json',dict(name=a.name,source_commit=commit,cpu=0,flags='-O3 -lm -g -Werror',baseline=str(b),row_results=str(row),target_runs_requested=a.target_runs,deadline=a.deadline))
+        save('manifest.json',dict(name=a.name,source_commit=commit,cpu=0,flags='-O3 -lm -g -Werror',baseline=str(b),row_results=str(row),target_runs_requested=a.target_runs,deadline=a.deadline,parent_study=str(a.parent_study.resolve()) if a.parent_study else None,paired_seed=598 if a.parent_study else None))
         event('build-and-environment')
         with (r/'environment.txt').open('w') as f:
             for cmd in [['date'],['hostname','-f'],['uname','-a'],['lscpu'],['gcc','--version'],['python3','--version'],['uptime']]:
@@ -128,21 +129,32 @@ def main():
         run(['valgrind','--leak-check=full','--show-leak-kinds=all','--errors-for-leak-kinds=all','--error-exitcode=99',binary,101],d,'run',timeout=120)
         memory.append(dict(tool='Memcheck',size=101,status='PASS')); save('memory-safety.json',memory)
         event('small-release-timing')
-        records=[]
-        def measure(n,k,limit):
+        records=[]; parent_records=[]; rng=random.Random(598)
+        parent=None
+        if a.parent_study:
+            parent=a.parent_study.resolve(); pm=json.loads((parent/'manifest.json').read_text())
+            assert digest(parent/'source/sandpile.exe')==json.loads((parent/'build-hashes.json').read_text())['binary']
+        def measure(n,k,limit,is_parent=False):
             # Read actual Central time immediately before every target measurement.
             subprocess.run(['env','TZ=America/Chicago','date'],check=True)
             if remaining()<limit+60: raise RuntimeError('deadline guard: insufficient time')
-            record=dict(variant=a.name,source_commit=commit,run=k,**run_one(binary,r/'timing'/f'n{n}-run{k}',n,0,timeout=limit))
+            exe=parent/'source/sandpile.exe' if is_parent else binary
+            label=pm['name'] if is_parent else a.name; sha=pm['source_commit'] if is_parent else commit
+            dirname=f'parent-n{n}-run{k}' if is_parent else f'n{n}-run{k}'
+            record=dict(variant=label,source_commit=sha,run=k,**run_one(exe,r/'timing'/dirname,n,0,timeout=limit))
             compare(goldens/f'n{n}'/'identity.png',pathlib.Path(record['directory'])/'identity.png')
-            records.append(record)
-            with (r/'measurements.csv').open('w',newline='') as f:
-                w=csv.DictWriter(f,fieldnames=list(record)); w.writeheader(); w.writerows(records)
+            selected=parent_records if is_parent else records; selected.append(record)
+            csv_name='parent-measurements.csv' if is_parent else 'measurements.csv'
+            with (r/csv_name).open('w',newline='') as f:
+                w=csv.DictWriter(f,fieldnames=list(record)); w.writeheader(); w.writerows(selected)
             print(json.dumps(record),flush=True); return record
         # Same excluded N=101 preflight as prior studies; no target warmup.
         run_one(binary,r/'timing/preflight-n101',101,0,timeout=60)
+        if parent: run_one(parent/'source/sandpile.exe',r/'timing/parent-preflight-n101',101,0,timeout=60)
         for n in [n for n in [101,251,501] if n<=a.small_max]:
-            for k in range(1,4): measure(n,k,90)
+            for k in range(1,4):
+                order=[False,True] if parent else [False]; rng.shuffle(order)
+                for is_parent in order: measure(n,k,90,is_parent)
         if not a.skip_target:
             event('target-release-first')
             first=measure(1001,1,480)
