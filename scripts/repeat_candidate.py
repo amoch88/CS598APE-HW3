@@ -4,14 +4,18 @@ import argparse,csv,datetime,json,pathlib,statistics,subprocess,time
 from zoneinfo import ZoneInfo
 from benchmark import run_one,digest
 from png_pixels import compare
-p=argparse.ArgumentParser();p.add_argument('study',type=pathlib.Path);p.add_argument('--runs',type=int,default=3);p.add_argument('--deadline')
+p=argparse.ArgumentParser();p.add_argument('study',type=pathlib.Path);p.add_argument('--runs',type=int,default=3);p.add_argument('--deadline');p.add_argument('--resume',action='store_true')
 a=p.parse_args();r=a.study.resolve();manifest=json.loads((r/'manifest.json').read_text());state=json.loads((r/'status.json').read_text())
 assert state['phase']=='complete' and state['status']=='PASS'
 assert json.loads((r/'target-correctness/report.json').read_text())['status']=='PASS'
 binary=r/'source/sandpile.exe';assert digest(binary)==json.loads((r/'build-hashes.json').read_text())['binary']
 records=list(csv.DictReader((r/'measurements.csv').open()));fieldnames=list(records[0]);target=[x for x in records if int(x['size'])==1001]
 deadline=datetime.datetime.fromisoformat(a.deadline).replace(tzinfo=ZoneInfo('America/Chicago')).timestamp() if a.deadline else float('inf')
-with (r/'repeat-manifest.json').open('x') as f:json.dump(dict(source_commit=manifest['source_commit'],initial_target_count=len(target),requested_target_count=a.runs,deadline=a.deadline,reason='promising candidate already passed target integer correctness'),f,indent=2)
+if a.resume:
+ assert (r/'repeat-manifest.json').exists()
+ assert json.loads((r/'repeat-manifest.json').read_text())['source_commit']==manifest['source_commit']
+repeat_path=r/('repeat-continuation-'+datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%SZ')+'.json' if a.resume else 'repeat-manifest.json')
+with repeat_path.open('x') as f:json.dump(dict(source_commit=manifest['source_commit'],initial_target_count=len(target),requested_target_count=a.runs,deadline=a.deadline,reason='promising candidate already passed target integer correctness'),f,indent=2)
 for k in range(len(target)+1,a.runs+1):
  subprocess.run(['env','TZ=America/Chicago','date'],check=True)
  estimate=max(float(x['wall_seconds']) for x in target)
