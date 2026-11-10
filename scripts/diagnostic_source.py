@@ -46,10 +46,18 @@ def replace_once(text,old,new):
 def main():
     p=argparse.ArgumentParser(); p.add_argument('source',type=pathlib.Path); p.add_argument('output',type=pathlib.Path)
     a=p.parse_args(); original=a.source.read_text(); text=original
-    text=replace_once(text,'static void stabilize() {',SUPPORT+'\nstatic void stabilize() {\n  int phase=phase_next++;\n  struct phase_stats *d=&phases[phase];\n  double started=now_seconds();')
+    support=SUPPORT
+    row_intervals='precompute_active_rows' in original
+    if row_intervals:
+        support=support.replace('  FILE *f=fopen("diagnostics.json","wx");', '  scan=active; // interval traversal visits only active cells\n  FILE *f=fopen("diagnostics.json","wx");')
+    text=replace_once(text,'static void stabilize() {',support+'\nstatic void stabilize() {\n  int phase=phase_next++;\n  struct phase_stats *d=&phases[phase];\n  double started=now_seconds();')
     text=replace_once(text,'    changed = 0;\n','    changed = 0;\n    d->sweeps++;\n')
-    text=replace_once(text,'          changed = 1; // topple it', '          d->topples++;\n          int q=grid[i][j]/4;\n          d->qhist[q<8?q:8]++;\n          if(grid[i][j]>d->max_height) d->max_height=grid[i][j];\n          changed = 1; // topple it')
-    text=replace_once(text,'  } while (changed);\n}', '  } while (changed);\n  d->seconds=now_seconds()-started;\n  dump_phase(phase);\n}')
+    indent='        ' if row_intervals else '          '
+    text=replace_once(text,indent+'changed = 1; // topple it',
+        indent+'d->topples++;\n'+indent+'int q=grid[i][j]/4;\n'+indent+'d->qhist[q<8?q:8]++;\n'+
+        indent+'if(grid[i][j]>d->max_height) d->max_height=grid[i][j];\n'+indent+'changed = 1; // topple it')
+    ending='  } while (changed);\n  free(rows);\n}' if row_intervals else '  } while (changed);\n}'
+    text=replace_once(text,ending,ending[:-1]+'  d->seconds=now_seconds()-started;\n  dump_phase(phase);\n}')
     text=replace_once(text,'  render("identity.png");','  double render_started=now_seconds();\n  render("identity.png");\n  render_seconds=now_seconds()-render_started;\n  print_diagnostics();')
     with a.output.open('x') as f: f.write(text)
     with a.output.with_suffix('.diff').open('x') as f:
