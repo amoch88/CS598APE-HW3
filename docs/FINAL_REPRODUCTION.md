@@ -145,14 +145,14 @@ For any corresponding completed directories, use `scripts/summarize_final.py
 It copies compact evidence unchanged and derives tables from raw CSV values.
 
 ```bash
-python3 -m venv .plot-venv
-.plot-venv/bin/python -m pip install -r scripts/plot-requirements.txt
-.plot-venv/bin/python scripts/plot_final.py \
+python3 scripts/setup_plotting.py
+results/plot-venv/bin/python scripts/plot_final.py \
   measurements/final-study/summary.json --output figures/final
 ```
 
 On the measured VM, venv/pip bootstrapping was necessary because system Python
-had no pip/ensurepip. An isolated ignored `results/plot-venv` was used; no sudo or
+had no pip/ensurepip. `setup_plotting.py` uses that same bootstrap procedure when needed. An isolated
+ignored `results/plot-venv` was used; no sudo or
 system package changes were made. The package lock records actual installed
 versions. Plots are PDF and SVG, with editable text and vector geometry. Their
 whiskers show measured min?max ranges, not confidence intervals. Worklist lines
