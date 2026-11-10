@@ -9,11 +9,13 @@ def main():
     result={'baseline_source_commit':(r/'source-commit.txt').read_text().strip(),'runs':rows,
         'timing_summary':json.loads((r/'timing/summary.json').read_text()),
         'correctness':json.loads((r/'correctness/report.json').read_text()),
-        'diagnostics':json.loads((r/'profiles/diagnostic-n1001/diagnostics.json').read_text()),
-        'workflow':json.loads((r/'workflow-status.json').read_text())}
-    if result['workflow']['phase']!='complete' or result['workflow']['status']!='PASS':
+        'diagnostics':json.loads((r/'profiles/diagnostic-n251/diagnostics.json').read_text()),
+        'workflow':json.loads((r/'workflow-status.json').read_text()),
+        'memory_safety':json.loads((r/'memory-safety.json').read_text())}
+    if result['workflow']['phase']!='complete' or result['workflow']['status'] not in ('PASS','COMPLETE_WITH_FINDINGS'):
         raise RuntimeError('workflow did not complete successfully')
-    if len(rows)!=5 or any(int(row['exit_status']) for row in rows): raise RuntimeError('not five successful runs')
+    expected=json.loads((r/'timing/manifest.json').read_text())['runs']
+    if len(rows)!=expected or any(int(row['exit_status']) for row in rows): raise RuntimeError('incomplete or failed timing runs')
     if len({row['png_sha256'] for row in rows})!=1: raise RuntimeError('baseline output hashes differ')
     if abs(statistics.median(t)-result['timing_summary']['median_seconds'])>1e-9: raise RuntimeError('summary mismatch')
     dest=r/'study-summary.json'

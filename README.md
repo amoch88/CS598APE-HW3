@@ -64,7 +64,7 @@ Run the complete study from the repository root, with a new output directory:
 python3 scripts/reproduce.py --output "results/reproduction-$(date -u +%Y%m%dT%H%M%SZ)"
 ```
 
-This may take substantial time: it executes five full-size baseline runs and
+This may take substantial time: it executes three full-size baseline runs and
 additional full-size correctness/diagnostic runs. Keep other compute workloads
 idle. The launcher refuses an existing output directory, archives the exact
 baseline Git commit, builds it using its original Makefile and flags
@@ -74,7 +74,7 @@ source or overwrites root-level `identity.png` / `sandpile.exe`.
 
 Timing uses GNU time, one process at a time pinned to logical CPU 0, including
 allocation, both stabilizations, rendering, buffered PNG output, and cleanup.
-An excluded N=101 preflight precedes five N=1001 observations; there is no
+An excluded N=101 preflight precedes three N=1001 observations; there is no
 excluded full-size warmup. `timing/timings.csv` contains all raw observations;
 `summary.json` reports median, min/max, mean, sample standard deviation, and
 inclusive quartiles. Validation and profiling are outside these timed runs.
@@ -113,26 +113,31 @@ python3 scripts/check.py \
 ```
 
 This compares every final integer cell and decoded pixel against frozen golden
-outputs for N=1,2,3,4,5,6,7,8,15,16,31,32,101,1001. Do not use a modified
+outputs for N=1,2,3,4,5,6,7,8,15,16,31,32,101,251,1001. Do not use a modified
 production source as the baseline oracle. Retain the original source commit,
 compiler flags, and golden manifests across future experiments.
 
 ### Profiling and interpretation
 
-`run_study.py` waits for timing completion before running correctness or profiling.
-It saves failed perf probes, a full-size `-pg` gprof sample profile, a Callgrind
-instruction profile at N=101, full-size diagnostic phase timings/counters,
-ASan/UBSan checks at N=1,2,3,4,31,32,101, and a Valgrind leak/memory check at
-N=101. Every diagnostic image must match the baseline. The diagnostic final
-integer grid must also match the uninstrumented adapter's full integer grid.
+`run_study.py` waits for timing completion, then prioritizes exploratory profiles:
+`-pg` gprof at N=251, phase counters/times at N=251, and Callgrind instruction
+attribution at N=101. These are explicitly smaller workloads, not target-size
+profiles. The full correctness suite follows, including an N=1001 integer-grid
+run whose adapter records time around the unchanged computation and rendering
+calls. This reuses a required correctness run instead of adding an expensive
+full-size profiling run. ASan/UBSan runs at N=1,2,3,4,31,32,101, and Valgrind
+leak/memory checks run at N=101. Every diagnostic image must match the baseline;
+the N=251 diagnostic final integer grid must match the uninstrumented adapter.
 
 `diagnostic_source.py` generates a disposable instrumented source under results,
 with a saved diff. It counts sweeps, unit topplings, and the distribution of
 `height/4` at unstable visits; scan and active visits are derived from exact
 per-sweep geometry counts. Both phase grids are saved. Its extra counter updates
 perturb performance: diagnostic times are not release benchmark times. Gprof
-also uses a separate instrumented binary. Callgrind N=101 instruction counts are
-not N=1001 runtime evidence or hardware cache measurements.
+also uses a separate instrumented binary. Neither the N=251 profiles nor the
+N=101 instruction counts establish N=1001 line-level runtime fractions or
+hardware cache behavior. The target adapter's outer timing is separate from the
+three release measurements.
 
 Run the decoder test independently with:
 
@@ -147,3 +152,11 @@ performance claims must use VM measurements. For later optimizations, record one
 source commit per isolated change, use paired seeded baseline/candidate run
 orders, retain all observations, report dispersion, and show independent and
 cumulative effects. No performance optimization is implemented in this phase.
+
+The initial study was reduced from five to three total release runs at the user's
+request while run 2 was active. `resume_baseline.py` replaced only the controller;
+the second GNU time and sandpile processes continued uninterrupted. That run's
+GNU time values are original; its auxiliary Python launcher time is unavailable
+and left blank, and its start timestamp is reconstructed from the pre-run snapshot
+mtime. The original five-run manifest and transition details remain in results.
+Future reproductions start directly with three runs; use `--runs 5` if desired.

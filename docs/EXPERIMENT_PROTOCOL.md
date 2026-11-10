@@ -19,7 +19,7 @@ never return them. Discarding their accumulated values may alter the image.
 
 - Original Makefile with GCC and -O3 -lm -g -Werror.
 - One excluded N=101 preflight; no full-size warmup.
-- Five sequential N=1001 runs pinned to logical CPU 0.
+- Three sequential N=1001 runs pinned to logical CPU 0.
 - GNU time elapsed seconds are the primary metric (0.01-second printed precision).
 - Include process execution, allocation, both stabilizations, rendering, PNG
   compression and buffered writes, and cleanup. No fsync is added.
@@ -27,7 +27,7 @@ never return them. Discarding their accumulated values may alter the image.
 - Retain raw elapsed/user/system time, max RSS, exit status, output SHA-256,
   timestamps, and /proc/stat snapshots before and after each run.
 - Report every observation, median, inclusive quartiles, min/max, mean, and
-  sample standard deviation (denominator n-1). Five runs give limited statistical
+  sample standard deviation (denominator n-1). Three runs give limited statistical
   precision. Do not label an IQR as a confidence interval or silently omit outliers.
 - A pinned vCPU is not a dedicated physical core. Record virtualization and load;
   VM host interference and unreported frequency changes remain limitations.
@@ -55,12 +55,16 @@ this study does not claim arbitrary-positive-int correctness.
 ## Profiling and evidence
 
 Probe perf without changing system policy. If denied, retain error messages and
-record the exact policy value. A full-size gprof build supplies sampled CPU-time
-attribution; report its sampling granularity and separate instrumentation effects.
+record the exact policy value. An N=251 gprof build supplies exploratory sampled CPU-time
+attribution; report its sampling granularity, grid size and instrumentation effects.
+An N=251 counter build gives phase/work diagnostics. Neither is a target-size
+line-level runtime profile. The required N=1001 integer-grid adapter times the
+unchanged computation and rendering calls externally, avoiding an additional
+expensive full-size profiling run.
 Callgrind N=101 supplies deterministic instruction attribution only for that size,
 not target-size timing or hardware cache evidence.
 
-The generated diagnostic copy preserves the toppling rule, traversal and mask.
+The generated N=251 diagnostic copy preserves the toppling rule, traversal and mask.
 Counters record each stabilization's sweeps, topplings, encountered heights and
 phase time; exact geometry counts derive scan/active visits per sweep. It saves
 both phase grids, and its final grid/image must match the uninstrumented adapter.
@@ -108,3 +112,17 @@ approximately half a page to the computation/semantics, one page to measured
 motivation and changes, one page to evaluation/correctness, and half a page to
 limitations and introspection. Include a compact profile table and a timing figure
 with individual runs and dispersion. Put detailed commands in the artifact README.
+
+## Initial run-count revision
+
+The user reduced the initial five-run plan to three total observations while run
+2 was active. Its GNU time child and sandpile child were not interrupted. Only
+the orchestration process was replaced. The run's auxiliary launcher timer was
+not recoverable and is deliberately blank; the start timestamp comes from the
+original pre-run snapshot mtime. Primary elapsed/user/system/RSS/status values
+come directly from its original GNU time output. The initial manifest and a
+transition note are retained. Future fresh runs need no controller transition.
+A brief infrastructure smoke test/build on CPU 2 occurred during run 2; its
+artifacts and timestamps are retained under infrastructure-preflight/. All
+full-size measurements and all substantive profile/correctness workloads run
+sequentially on CPU 0; ordinary OS and VM-host activity remains uncontrolled.

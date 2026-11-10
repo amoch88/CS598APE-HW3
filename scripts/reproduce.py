@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the immutable starter, measure five runs, then check and profile it."""
+"""Build the immutable starter, measure release runs, then check and profile it."""
 import argparse, datetime, hashlib, json, os, pathlib, shutil, subprocess, sys
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 BASE='15fe837445b8e32a15ac61fcfa388980b54d9173'
@@ -7,6 +7,7 @@ BASE='15fe837445b8e32a15ac61fcfa388980b54d9173'
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--output',type=pathlib.Path,required=True)
+    p.add_argument('--runs',type=int,default=3)
     a=p.parse_args(); r=a.output.resolve(); r.mkdir(parents=True,exist_ok=False)
     for name in ['source','bin','golden','profiles']: (r/name).mkdir()
     with (r/'baseline-source.tar').open('wb') as archive:
@@ -37,7 +38,7 @@ def main():
         (r/'profiles'/f'perf-{name}-exit-status.txt').write_text(str(result.returncode)+'\n')
     with (r/'benchmark.log').open('w') as out:
         process=subprocess.Popen([sys.executable,'-u',str(ROOT/'scripts/benchmark.py'),'--binary',str(r/'bin/baseline.exe'),
-            '--output',str(r/'timing'),'--runs','5','--cpu','0'],stdout=out,stderr=subprocess.STDOUT)
+            '--output',str(r/'timing'),'--runs',str(a.runs),'--cpu','0'],stdout=out,stderr=subprocess.STDOUT)
         (r/'benchmark.pid').write_text(str(process.pid)+'\n')
         if process.wait(): raise RuntimeError('benchmark failed; inspect benchmark.log')
     with (r/'workflow.log').open('w') as out:

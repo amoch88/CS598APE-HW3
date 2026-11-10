@@ -62,7 +62,7 @@ def main():
     p.add_argument('--binary',type=pathlib.Path,required=True); p.add_argument('--output',type=pathlib.Path,required=True)
     p.add_argument('--reference-png',type=pathlib.Path,required=True)
     p.add_argument('--golden',type=pathlib.Path); p.add_argument('--target-png',type=pathlib.Path)
-    p.add_argument('--sizes',nargs='+',type=int,default=[1,2,3,4,5,6,7,8,15,16,31,32,101,1001])
+    p.add_argument('--sizes',nargs='+',type=int,default=[1,2,3,4,5,6,7,8,15,16,31,32,101,251,1001])
     a=p.parse_args()
     for key in ('source','binary','output','reference_png','golden','target_png'):
         if getattr(a,key): setattr(a,key,getattr(a,key).resolve())
@@ -88,6 +88,7 @@ def main():
                 compare(a.golden/f'n{n}'/'identity.png',d/'identity.png')
             entry={'kind':'identity','size':n,'all_allocated_cells_compared_to_oracle':n<=32,
                    'all_allocated_cells_compared_to_golden':bool(a.golden),'active_stability':'PASS','grid_palette':'PASS','release_adapter_pixels':'PASS'}
+            entry['adapter_times']=json.loads((d/'adapter-times.json').read_text())
             if n==1001:
                 try: entry['reference_comparison']=compare(a.reference_png,d/'identity.png')
                 except AssertionError as e: entry['reference_comparison']={'status':'FAIL','error':str(e)}; report['reference_mismatch']=True

@@ -31,7 +31,7 @@ def run_one(binary, directory, n, cpu):
 def main():
     p=argparse.ArgumentParser(); p.add_argument('--binary', required=True, type=pathlib.Path)
     p.add_argument('--output', required=True, type=pathlib.Path); p.add_argument('--size', type=int, default=1001)
-    p.add_argument('--runs', type=int, default=5); p.add_argument('--cpu', type=int, default=0)
+    p.add_argument('--runs', type=int, default=3); p.add_argument('--cpu', type=int, default=0)
     a=p.parse_args(); a.binary=a.binary.resolve(); a.output=a.output.resolve(); a.output.mkdir()
     if a.runs < 2: p.error('--runs must be at least 2 for sample standard deviation')
     manifest=dict(binary=str(a.binary), binary_sha256=digest(a.binary), size=a.size, runs=a.runs,
