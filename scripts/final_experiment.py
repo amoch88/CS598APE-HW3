@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Bounded, sequential validation and release timing for an archived source commit."""
-import argparse, csv, datetime, hashlib, json, os, pathlib, random, signal, subprocess, sys, time, traceback
+import argparse, csv, datetime, hashlib, json, os, pathlib, random, re, signal, subprocess, sys, time, traceback
 from zoneinfo import ZoneInfo
 from benchmark import run_one, digest
 from check import compare_grids, load_grid, reference_stabilize
@@ -34,7 +34,7 @@ def instrument(source):
         s=s.replace('  while (pending) {','  while (pending) {\n    work.visits++;',1)
     else:
         s=s.replace('    changed = 0;','    changed = 0;\n    work.sweeps++;')
-        s=s.replace('        if (grid[i][j] < 4)','        work.visits++;\n        if (grid[i][j] < 4)')
+        s=re.sub(r'(?m)^([ \t]*)if \(grid\[i\]\[j\] < 4\)', r'\1work.visits++;\n\1if (grid[i][j] < 4)',s)
     anchor='grid[i][j] &= 3;' if 'grid[i][j] &= 3;' in s else 'grid[i][j] -= 4 * q;'
     if s.count(anchor) not in [1,2,4]: raise ValueError('unexpected toppling instrumentation anchors')
     s=s.replace(anchor,'work.events++; work.unit_topplings += (uint64_t)q;\n        '+anchor)
