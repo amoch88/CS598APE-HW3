@@ -1,6 +1,7 @@
 #include <errno.h>
 #include <inttypes.h>
 #include <math.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -101,8 +102,15 @@ static struct active_row *precompute_active_rows(void) {
   return rows;
 }
 
-static void stabilize() {
-  struct active_row *rows = precompute_active_rows();
+// Positive increments are checked before addition; q*4 cannot exceed the
+// current nonnegative int height. Inactive cells retain their sink counters.
+static void add_grains(int *cell, int q) {
+  if (*cell > INT_MAX - q)
+    die("integer overflow in grain accumulation");
+  *cell += q;
+}
+
+static void stabilize_checked(const struct active_row *rows) {
   int changed = 0;
   do {
     changed = 0;
@@ -111,18 +119,62 @@ static void stabilize() {
         if (grid[i][j] < 4)
           continue;
         changed = 1; // topple it
-        grid[i][j] -= 4;
+        // q successive topplings are legal: before the last, height >= 4.
+        int q = grid[i][j] / 4;
+        grid[i][j] -= 4 * q;
         if (i > 0)
-          grid[i - 1][j]++;
+          add_grains(&grid[i - 1][j], q);
         if (j > 0)
-          grid[i][j - 1]++;
+          add_grains(&grid[i][j - 1], q);
         if (i < N - 1)
-          grid[i + 1][j]++;
+          add_grains(&grid[i + 1][j], q);
         if (j < N - 1)
-          grid[i][j + 1]++;
+          add_grains(&grid[i][j + 1], q);
       }
     }
   } while (changed);
+}
+
+static void stabilize_bounded(const struct active_row *rows) {
+  int changed = 0;
+  do {
+    changed = 0;
+    for (int i = 0; i < N; ++i) {
+      for (int j = rows[i].first; j <= rows[i].last; ++j) {
+        if (grid[i][j] < 4)
+          continue;
+        changed = 1; // topple it
+        // q successive topplings are legal: before the last, height >= 4.
+        int q = grid[i][j] / 4;
+        grid[i][j] -= 4 * q;
+        if (i > 0)
+          grid[i - 1][j] += q;
+        if (j > 0)
+          grid[i][j - 1] += q;
+        if (i < N - 1)
+          grid[i + 1][j] += q;
+        if (j < N - 1)
+          grid[i][j + 1] += q;
+      }
+    }
+  } while (changed);
+}
+
+// Legal topplings cannot increase the sum of positive cell heights:
+// subtracting 4*q removes 4*q positive grains, and at most four recipients
+// gain q each (including negative sink counters). If that initial sum fits
+// int, every subsequent cell value fits int. Negative cells only increase.
+// Keep checked updates for arbitrary test inputs outside this sufficient bound.
+static void stabilize() {
+  struct active_row *rows = precompute_active_rows();
+  int64_t positive = 0;
+  for (int i=0;i<N && positive<=INT_MAX;++i)
+    for (int j=0;j<N && positive<=INT_MAX;++j)
+      if (grid[i][j]>0) positive += grid[i][j];
+  if (positive<=INT_MAX)
+    stabilize_bounded(rows);
+  else
+    stabilize_checked(rows);
   free(rows);
 }
 
